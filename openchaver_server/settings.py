@@ -37,7 +37,7 @@ DEBUG = True if os.getenv('DEBUG') == 'True' else False
 
 DEPLOY = True if os.getenv('DEPLOY') == 'True' else False
 
-ALLOWED_HOSTS = ['*'] if DEBUG else ['openchaver.com']
+ALLOWED_HOSTS = ['*'] if DEBUG else ['api.openchaver.com']
 
 # Application definition
 INSTALLED_APPS = [
@@ -48,14 +48,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'users',
     'djoser',
     'devices',
+    'drf_spectacular',
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -143,10 +147,22 @@ else:
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        (...)
-    ),
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "https://openchaver.com",
+    "https://api.openchaver.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "https://openchaver.com",
+    "https://api.openchaver.com",
+]
 
