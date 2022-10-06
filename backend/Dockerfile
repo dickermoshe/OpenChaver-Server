@@ -18,4 +18,4 @@ COPY . .
 RUN python manage.py collectstatic --noinput
 
 # Run the app on $PORT
-CMD gunicorn -b  0.0.0.0:${PORT} openchaver_server.wsgi:application
+CMD gunicorn -b  0.0.0.0:${PORT} openchaver_server.wsgi:application --log-file=-
