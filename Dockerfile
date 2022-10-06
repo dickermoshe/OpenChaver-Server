@@ -1,8 +1,6 @@
 FROM python:3.10
 RUN pip install --upgrade pip
 
-EXPOSE 8000
-
 # set work directory
 WORKDIR /usr/src/app
 
@@ -17,5 +15,5 @@ RUN pip install -r requirements.txt
 # Copy source code
 COPY . .
 
-# Run the app
-CMD ["gunicorn", "-b", "0.0.0.0:8000", "openchaver_server.wsgi:application"]
+# Run the app on $PORT
+CMD ["gunicorn", "-b", "0.0.0.0:$PORT", "openchaver_server.wsgi:application"]
