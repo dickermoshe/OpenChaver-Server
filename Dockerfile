@@ -15,5 +15,7 @@ RUN pip install -r requirements.txt
 # Copy source code
 COPY . .
 
+RUN python manage.py collectstatic --noinput
+
 # Run the app on $PORT
 CMD gunicorn -b  0.0.0.0:${PORT} openchaver_server.wsgi:application
