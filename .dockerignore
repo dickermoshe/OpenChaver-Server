@@ -1,0 +1,15 @@
+# Git
+.git
+
+# Frontend
+frontend
+
+# Environment
+.env
+local.env
+
+# Venv
+venv
+
+**/*.pyc
+**/*.sqlite3
