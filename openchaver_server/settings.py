@@ -13,12 +13,17 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv , dotenv_values
 from dj_database_url import config
-load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+if (BASE_DIR / 'local.env').exists():
+    local_env = dotenv_values(BASE_DIR / 'local.env')
+    if local_env['DEPLOY'] != 'True':
+        load_dotenv(BASE_DIR / 'local.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -135,5 +140,13 @@ if DEPLOY:
 else:
     EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
     EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        (...)
+    ),
+}
 
 
