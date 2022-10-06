@@ -12,6 +12,7 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
+    devices = models.ManyToManyField('devices.Device', blank=True, related_name='devices')
 
     def __str__(self):
         return self.email
