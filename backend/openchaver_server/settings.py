@@ -142,7 +142,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.CustomUser'
 
 if DEPLOY:
-    pass
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'mail.privateemail.com'
+    EMAIL_PORT = 465
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = 'mail@openchaver.com'
+    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 else:
     EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
     EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
@@ -167,4 +172,6 @@ CSRF_TRUSTED_ORIGINS = [
     "https://openchaver.com",
     "https://api.openchaver.com",
 ]
+
+
 
