@@ -1,6 +1,6 @@
 services:
 	- type: web
 		name: openchaver-site
-		env: node
+		env: static
 		buildCommand: npm install && npm run build
-		startCommand: node build/index.js
+		staticPublishPath: build
