@@ -11,8 +11,8 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@fontsource/fira-mono": "^4.5.0",
 		"@neoconfetti/svelte": "^1.0.0",
+		"@sveltejs/adapter-static": "^1.0.0-next.44",
 		"@sveltejs/kit": "next",
 		"@types/cookie": "^0.5.1",
 		"prettier": "^2.6.2",
@@ -25,7 +25,7 @@
 		"vite": "^3.1.0"
 	},
 	"type": "module",
-	"dependencies": {
-		"@sveltejs/adapter-static": "^1.0.0-next.44"
+	"engines": {
+		"node": ">=16.7"
 	}
 }
