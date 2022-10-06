@@ -8,10 +8,7 @@ const config: Config = {
 	preprocess: preprocess(),
 
 	kit: {
-		adapter: adapter(),
-		prerender: {
-			default: true
-		}
+		adapter: adapter()
 	}
 };
 
