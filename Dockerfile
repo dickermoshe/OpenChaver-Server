@@ -16,4 +16,4 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Run the app on $PORT
-CMD ["gunicorn", "-b", "0.0.0.0:$PORT", "openchaver_server.wsgi:application"]
+CMD gunicorn -b  0.0.0.0:${PORT} openchaver_server.wsgi:application
