@@ -13,8 +13,7 @@ const config = {
 		}),
 		prerender: {
 			onError: 'continue'
-		},
-		trailingSlash: 'always'
+		}
 	}
 }
 
