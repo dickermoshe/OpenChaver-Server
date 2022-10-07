@@ -9,7 +9,6 @@ def get_random_code():
 # Create your models here.
 class Device(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='devices')
-    id = models.UUIDField(primary_key = True,editable=False,default = uuid.uuid4,)
     uninstall_code = models.CharField(max_length=8, default=get_random_code)
     name = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True)

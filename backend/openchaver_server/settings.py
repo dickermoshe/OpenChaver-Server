@@ -36,7 +36,7 @@ DEBUG = True if os.getenv('DEBUG') == 'True' else False
 
 DEPLOY = True if os.getenv('DEPLOY') == 'True' else False
 
-ALLOWED_HOSTS = ['*'] if DEBUG else ['api.openchaver.com']
+ALLOWED_HOSTS = ['*'] if DEBUG else ['api.openchaver.com',]
 
 # Application definition
 INSTALLED_APPS = [
