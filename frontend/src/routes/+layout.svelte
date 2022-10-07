@@ -52,11 +52,12 @@
 	nav li a {
 		display: block;
 		padding: calc(var(--general-spacing) / 3) 0 calc(var(--general-spacing) / 3)
-		var(--general-spacing);
+			var(--general-spacing);
 		color: var(--default-color);
 		text-decoration: none;
 	}
-	nav li:hover a, nav li.active a {
+	nav li:hover a,
+	nav li.active a {
 		color: #fff;
 	}
 	:global(main > h1) {
