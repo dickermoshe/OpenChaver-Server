@@ -10,3 +10,5 @@
 <p>Our site is not operational at the current time.</p>
 
 <p>View our progress or offer your help: <a href="https://github.com/dickermoshe/openchaver">Github repo</a></p>
+
+<p>A download link will be added soon.</p>

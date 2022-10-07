@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
 	const logout = async () => {
 		await fetch('https://api.openchaver.com/auth/token/logout/', {
 			method: 'POST'
@@ -12,7 +12,7 @@
 		<h1>OpenChaver</h1>
 	</a>
 	<div class="buttons">
-		<a href="../" style='color: var(--secondary-color);'>Logout</a>
+		<!-- <a href="../" style='color: var(--secondary-color);'>Logout</a> -->
 	</div>
 </header>
 
