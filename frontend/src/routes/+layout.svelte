@@ -1,10 +1,9 @@
 <script lang="ts">
+	import { page } from '$app/stores'
 	import '../app.css'
 	import Header from '../lib/Header.svelte'
 
-	// export const prerender = true
-
-	const routes = ['dashboard', 'accountabilty', 'uninstall', 'subscription', 'account']
+	const routes = ['dashboard', 'accountabilty', 'account', 'subscription', 'uninstall']
 </script>
 
 <Header />
@@ -14,7 +13,7 @@
 		<ul>
 			{#each routes as route}
 				<li>
-					<a href={route} sveltekit:prefetch>{route}</a>
+					<a href={route} data-sveltekit-prefetch>{route}</a>
 				</li>
 			{/each}
 		</ul>
@@ -22,13 +21,9 @@
 </aside>
 
 <main>
-	<!-- <div class="crumbs">
-		<ol>
-			<li>
-				<a href="/console">Console</a>
-			</li>
-		</ol>
-	</div> -->
+	{#if $page.routeId}
+		<h1>{$page.routeId}</h1>
+	{/if}
 
 	<slot />
 </main>
@@ -56,5 +51,8 @@
 			var(--general-spacing);
 		color: var(--default-color);
 		text-decoration: none;
+	}
+	main h1::first-letter {
+		text-transform: capitalize;
 	}
 </style>
