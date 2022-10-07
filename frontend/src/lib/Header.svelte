@@ -13,12 +13,12 @@
 		width: 100%;
 		padding: 0 var(--general-spacing);
 		box-sizing: border-box;
-		box-shadow: 0 1px 3px rgb(0 0 0 / 6%), 0 1px 2px rgb(0 0 0 / 12%);
+		border-bottom: 2px solid #d7e4f4;
 		background-color: var(--default-bg-color);
 		z-index: 100;
 	}
 	a {
-		color: initial;
+		color: var(--default-color);
 		text-decoration: none;
 	}
 	h1 {

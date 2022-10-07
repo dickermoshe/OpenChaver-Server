@@ -3,7 +3,7 @@
 	import '../app.css'
 	import Header from '../lib/Header.svelte'
 
-	const routes = ['dashboard', 'accountabilty', 'account', 'subscription', 'uninstall']
+	const routes = ['dashboard', 'filtering', 'accountabilty', 'account', 'subscription', 'uninstall']
 </script>
 
 <Header />
@@ -44,17 +44,20 @@
 		transition: background-color ease-in-out 75ms;
 	}
 	nav li:hover {
-		background-color: rgba(0, 84, 59, 0.12);
+		background-color: #059669;
 	}
 	nav li.active {
-		background-color: rgba(0, 84, 59, 0.2);
+		background-color: #10b981;
 	}
 	nav li a {
 		display: block;
-		padding: calc(var(--general-spacing) / 5) 0 calc(var(--general-spacing) / 5)
-			var(--general-spacing);
+		padding: calc(var(--general-spacing) / 3) 0 calc(var(--general-spacing) / 3)
+		var(--general-spacing);
 		color: var(--default-color);
 		text-decoration: none;
+	}
+	nav li:hover a, nav li.active a {
+		color: #fff;
 	}
 	:global(main > h1) {
 		margin-top: 0;

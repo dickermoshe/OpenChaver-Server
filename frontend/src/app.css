@@ -1,6 +1,7 @@
 :root {
 	--default-bg-color: #fff;
-	--default-color: #212121;
+	--default-color: #2d3748;
+	--secondary-color: #718096;
 	--header-height: 56px;
 	--general-spacing: 1.5rem;
 }
@@ -29,10 +30,16 @@ aside {
 	margin-right: var(--general-spacing);
 	padding-top: calc(var(--general-spacing) * 1.5);
 	box-sizing: border-box;
-	box-shadow: 0 1px 3px rgb(0 0 0 / 6%), 0 1px 2px rgb(0 0 0 / 12%);
+	border-right: 2px solid #d7e4f4;
 }
 main {
 	grid-row: 2;
 	grid-column: 2;
 	padding-top: calc(var(--general-spacing) * 1.5);
+}
+a {
+	color: #718096;
+}
+a:hover{
+	color: #a0aec0;
 }
