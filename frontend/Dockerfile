@@ -7,7 +7,7 @@ WORKDIR /app
 COPY . .
 
 # Install and build
-RUN npm install && run build
+RUN npm install && npm run build
 
 # Run the app on $PORT
-CMD node build/index.js
+CMD node build/index.js --port ${PORT}:3000
