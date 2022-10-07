@@ -144,10 +144,12 @@ AUTH_USER_MODEL = 'users.CustomUser'
 if DEPLOY:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = 'mail.privateemail.com'
-    EMAIL_PORT = 465
+    EMAIL_PORT = 587
     EMAIL_USE_TLS = True
+    EMAIL_USE_SSL = False
     EMAIL_HOST_USER = 'mail@openchaver.com'
     EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 else:
     EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
     EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
@@ -207,10 +209,13 @@ LOGGING = {
 }
 
 DJOSER = {
-    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    
+    # TODO: Set this to the correct URL for the frontend
+    # This is for the frontend developer to set
+    'PASSWORD_RESET_CONFIRM_URL': "https://openchaver.com/reset-password/{uid}/{token}",
+    'ACTIVATION_URL': 'https://openchaver.com/activate/{uid}/{token}',
+
+
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {},
 }
-
