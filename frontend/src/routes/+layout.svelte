@@ -12,7 +12,7 @@
 	<nav>
 		<ul>
 			{#each routes as route}
-				<li>
+				<li class:active={route === $page.url.toString().split('/').pop() ?? $page.routeId}>
 					<a href={route} data-sveltekit-prefetch>{route}</a>
 				</li>
 			{/each}
@@ -34,6 +34,7 @@
 	}
 	nav ul {
 		list-style: none;
+		margin: 0;
 		padding: 0;
 	}
 	nav li {
@@ -45,12 +46,18 @@
 	nav li:hover {
 		background-color: rgba(0, 84, 59, 0.12);
 	}
+	nav li.active {
+		background-color: rgba(0, 84, 59, 0.2);
+	}
 	nav li a {
 		display: block;
 		padding: calc(var(--general-spacing) / 5) 0 calc(var(--general-spacing) / 5)
 			var(--general-spacing);
 		color: var(--default-color);
 		text-decoration: none;
+	}
+	:global(main > h1) {
+		margin-top: 0;
 	}
 	main h1::first-letter {
 		text-transform: capitalize;
