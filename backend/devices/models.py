@@ -19,6 +19,7 @@ class Device(models.Model):
 
 class Screenshot(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE, related_name='screenshots')
+    false_positive = models.BooleanField(default=False)
     image = models.ImageField(upload_to='images/')
     created = models.DateTimeField(auto_now_add=True)
 
