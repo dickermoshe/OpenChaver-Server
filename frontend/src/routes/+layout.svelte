@@ -1,16 +1,10 @@
-<script lang='ts'>
+<script lang="ts">
 	import '../app.css'
 	import Header from '$lib/Header.svelte'
 
-	export const prerender = true
+	// export const prerender = true
 
-	const routes = [
-		'dashboard',
-		'accountabilty',
-		'uninstall',
-		'subscription',
-		'account'
-	]
+	const routes = ['dashboard', 'accountabilty', 'uninstall', 'subscription', 'account']
 </script>
 
 <Header />
@@ -58,10 +52,7 @@
 	}
 	nav li a {
 		display: block;
-		padding:
-			calc(var(--general-spacing) / 5)
-			0
-			calc(var(--general-spacing) / 5)
+		padding: calc(var(--general-spacing) / 5) 0 calc(var(--general-spacing) / 5)
 			var(--general-spacing);
 		color: var(--default-color);
 		text-decoration: none;

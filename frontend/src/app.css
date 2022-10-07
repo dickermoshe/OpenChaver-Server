@@ -5,11 +5,12 @@
 	--general-spacing: 1.5rem;
 }
 
-html, body {
+html,
+body {
 	margin: 0;
 	background-color: var(--default-bg-color);
 	font-family: Helvetica, Arial, sans-serif;
-	letter-spacing: .5px;
+	letter-spacing: 0.5px;
 }
 body > div {
 	display: grid;
@@ -28,9 +29,7 @@ aside {
 	margin-right: var(--general-spacing);
 	padding-top: var(--general-spacing);
 	box-sizing: border-box;
-	box-shadow:
-		0 1px 3px rgb(0 0 0 / 6%),
-		0 1px 2px rgb(0 0 0 / 12%);
+	box-shadow: 0 1px 3px rgb(0 0 0 / 6%), 0 1px 2px rgb(0 0 0 / 12%);
 }
 main {
 	grid-row: 2;
