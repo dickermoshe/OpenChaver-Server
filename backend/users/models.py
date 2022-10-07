@@ -14,5 +14,16 @@ class CustomUser(AbstractUser):
     objects = CustomUserManager()
     devices = models.ManyToManyField('devices.Device', blank=True, related_name='devices')
 
+    is_confirmed = models.BooleanField(default=False)
+    
+    is_active = models.BooleanField(
+        _("active"),
+        default=False,
+        help_text=_(
+            "Designates whether this user should be treated as active. "
+            "Unselect this instead of deleting accounts."
+        ),
+    )
+
     def __str__(self):
         return self.email
