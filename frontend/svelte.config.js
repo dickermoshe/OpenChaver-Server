@@ -9,7 +9,7 @@ const config = {
 
 	kit: {
 		adapter: adapter({
-			fallback: 'error.html'
+			fallback: 'index.html'
 		})
 	}
 }
