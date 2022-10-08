@@ -25,7 +25,7 @@
 		width: 100%;
 		padding: 0 var(--general-spacing);
 		box-sizing: border-box;
-		background-color: var(--secondary-bg-color);
+		background-color: var(--default-bg-color);
 		border-bottom: 2px solid var(--default-border-color);
 		z-index: 100;
 	}

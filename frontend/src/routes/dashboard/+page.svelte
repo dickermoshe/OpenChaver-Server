@@ -3,4 +3,5 @@
 	<meta name="description" content="Control and modify your OpenChaver account." />
 </svelte:head>
 
-This is the user dashboard
+- Devices (active/total) [quick link to add a new device]<br />
+- Did the system trip<br />

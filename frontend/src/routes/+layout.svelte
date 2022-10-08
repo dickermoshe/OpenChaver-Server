@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import '../app.css'
-	import Header from '../lib/Header.svelte'
+	import Header from '$lib/Header.svelte'
 
 	const routes = ['dashboard', 'filtering', 'accountabilty', 'account', 'subscription', 'uninstall']
 </script>
