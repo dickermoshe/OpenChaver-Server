@@ -22,6 +22,14 @@ class Device(models.Model):
     @property
     def uninstall_uri(self):
         return f'chaver://uninstall/#uuid={self.uuid}&uninstall_code={self.uninstall_code}'
+    
+    @property
+    def latest_screenshot(self):
+        try:
+            return self.screenshots.order_by('-created').first().created
+        except:
+            return None
+
 
     def __str__(self):
         return self.name
