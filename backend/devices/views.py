@@ -44,7 +44,8 @@ class ChaverPermission(permissions.BasePermission):
         return obj.device.user == request.user
 
 
-class DeviceViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
+class DeviceViewSet(mixins.UpdateModelMixin,
+    mixins.ListModelMixin, mixins.RetrieveModelMixin,
                     mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
