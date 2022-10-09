@@ -7,8 +7,8 @@ class DeviceSerializer(s.ModelSerializer):
     """This is the serializer for the Device model"""
     class Meta: # pylint: disable=missing-class-docstring
         model = Device
-        fields = ('id','user','name','uuid','created','screenshots','chavers')
-        read_only_fields = ('created','uuid','screenshots','chavers','id','user')
+        fields = ('id','user','name','uuid','created','registered','screenshots','chavers')
+        read_only_fields = ('created','uuid','screenshots','chavers','id','registered','user')
 
 class UninstallCodeSerializer(s.ModelSerializer):
     """Serializer for uninstall code"""
