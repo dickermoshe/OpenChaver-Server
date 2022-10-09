@@ -16,4 +16,4 @@ class ScreenshotSerializer(ModelSerializer):
 class ChaverSerializer(ModelSerializer):
     class Meta:
         model = Chaver
-        fields = ('id', 'name', 'email', 'created')
+        fields = ('id', 'name', 'email',"device", 'created')
