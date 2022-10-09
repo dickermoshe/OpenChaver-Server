@@ -1,16 +1,21 @@
+import logging
+
 from django.core.mail import send_mail
 from django.conf import settings
 from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework import permissions
 from rest_framework import status
+from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema
 
 from .models import Device, Screenshot, Chaver
-from .serializers import DeviceSerializer, ScreenshotSerializer, ChaverSerializer , RegisterDeviceSerializer,VerifyUninstallCodeSerializer
+from .serializers import DeviceSerializer, ScreenshotSerializer, ChaverSerializer, RegisterDeviceSerializer, VerifyUninstallCodeSerializer, UninstallCodeSerializer
+
+logger = logging.getLogger(__name__)
 
 
 class DevicePermission(permissions.BasePermission):
@@ -51,9 +56,9 @@ class ChaverPermission(permissions.BasePermission):
         return obj.device.user == request.user
 
 
-class DeviceViewSet(mixins.UpdateModelMixin,
-    mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                    mixins.CreateModelMixin, viewsets.GenericViewSet):
+class DeviceViewSet(mixins.UpdateModelMixin, mixins.ListModelMixin,
+                    mixins.RetrieveModelMixin, mixins.CreateModelMixin,
+                    viewsets.GenericViewSet):
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
     permission_classes = [DevicePermission]
@@ -64,62 +69,73 @@ class DeviceViewSet(mixins.UpdateModelMixin,
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    def remove_device(self, request, pk):
-        """Remove a device from the user's devices list """
-        device = Device.objects.get(id=pk)
-        for chaver in device.chavers.all():
-            send_mail(
-                f'{device.user.email} removed you as a chaver.',
-                'This email is to inform you that you have been removed as a chaver from the device: '
-                + str(device.name),
-                settings.EMAIL_HOST_USER,
-                [chaver.email],
-                fail_silently=False,
-            )
-            chaver.delete()
-        device.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    @extend_schema(request=None, responses={200: UninstallCodeSerializer})
+    @action(detail=True,
+            methods=['get'],
+            permission_classes=[DevicePermission])
+    def uninstall_code(self, request, pk):
+        """
+        Get the uninstall code for the device
+        The only way to remove a device from the user's devices list is to use the uninstall code
+        """
 
-    @action(detail=True, methods=['post'])
-    def get_uninstall_code(self, request, pk):
-        """Get the uninstall code for the device"""
-        device = Device.objects.get(id=pk)
-        return Response(device.get_uninstall_code(), status=status.HTTP_200_OK)
-    
-    @extend_schema(
-        request=VerifyUninstallCodeSerializer,
-        responses={
-            200: None,
-            400: None,
-        }
-    )
-    @action(detail=False, methods=['post'],permission_classes=[permissions.AllowAny])
+        logger.info(
+            f"Getting uninstall code for device {pk} from user {request.user}")
+
+        device = self.get_object()
+
+        for chaver in device.chavers.all():
+            chaver: Chaver
+            logger.info(
+                f"Sending uninstall email to {chaver.name} from device {device.name}"
+            )
+            chaver.send_uninstall_email()
+
+        return Response(UninstallCodeSerializer(device).data,
+                        status=status.HTTP_200_OK)
+
+    @extend_schema(request=VerifyUninstallCodeSerializer,
+                   responses={
+                       200: None,
+                       400: None,
+                   })
+    @action(detail=False,
+            methods=['post'],
+            permission_classes=[permissions.AllowAny])
     def verify_uninstall_code(self, request):
         """Verify the uninstall code for the device"""
         serializer = VerifyUninstallCodeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        device = Device.objects.get(uuid=serializer.validated_data['device_id'])
-        if device.verify_uninstall_code(serializer.validated_data['uninstall_code']):
+        device = Device.objects.get(
+            uuid=serializer.validated_data['device_id'])
+        if device.verify_uninstall_code(
+                serializer.validated_data['uninstall_code']):
             device.delete()
             return Response(status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @extend_schema(
         request=RegisterDeviceSerializer,
-        responses={200: DeviceSerializer, 400: None},
+        responses={
+            200: DeviceSerializer,
+            400: None
+        },
     )
-    @action(detail=False,methods=['post'],permission_classes=[permissions.AllowAny])
+    @action(detail=False,
+            methods=['post'],
+            permission_classes=[permissions.AllowAny])
     def register_device(self, request):
         """Register a device to the user's devices list """
         serializer = RegisterDeviceSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        try:    
-            device = Device.objects.get(uuid=serializer.validated_data['device_id'])
+        try:
+            device = Device.objects.get(
+                uuid=serializer.validated_data['device_id'])
             if not device.registered:
                 device.registered = True
                 device.save()
-                return Response(DeviceSerializer(device).data, status=status.HTTP_200_OK)
+                return Response(DeviceSerializer(device).data,
+                                status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
         except Device.DoesNotExist:
@@ -139,18 +155,22 @@ class ScreenshotViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
 
     @action(detail=True, methods=['post'])
     def false_positive(self, request, pk=None):
+        """This endpoint is for a user or chaver to declare a screenshot as a false positive"""
         screenshot = Screenshot.objects.get(id=pk)
         screenshot.false_positive = True
         screenshot.save()
         return Response(status=status.HTTP_200_OK)
-    
 
-    @action(detail=True, methods=['post'],permission_classes=[permissions.AllowAny])
+    @action(detail=True,
+            methods=['post'],
+            permission_classes=[permissions.AllowAny])
     def add_screenshot(self, request, uuid):
         """Add a screenshot to the device's screenshots list """
         device = Device.objects.get(uuid=uuid)
-        screenshot = Screenshot.objects.create(device=device, image=request.data['image'])
+        screenshot = Screenshot.objects.create(device=device,
+                                               image=request.data['image'])
         return Response(status=status.HTTP_200_OK)
+
 
 class ChaverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
                     mixins.CreateModelMixin, viewsets.GenericViewSet):
