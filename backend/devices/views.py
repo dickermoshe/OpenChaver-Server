@@ -93,7 +93,7 @@ class DeviceViewSet(mixins.UpdateModelMixin,
             400: None,
         }
     )
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['post'],permission_classes=[permissions.AllowAny])
     def verify_uninstall_code(self, request):
         """Verify the uninstall code for the device"""
         serializer = VerifyUninstallCodeSerializer(data=request.data)
