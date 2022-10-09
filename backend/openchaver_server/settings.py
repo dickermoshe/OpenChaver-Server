@@ -214,8 +214,7 @@ DJOSER = {
     # This is for the frontend developer to set
     'PASSWORD_RESET_CONFIRM_URL': "https://openchaver.com/reset-password/{uid}/{token}",
     'ACTIVATION_URL': 'https://openchaver.com/activate/{uid}/{token}',
-
-
+    "PASSWORD_CHANGED_EMAIL_CONFIRMATION" :False,
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {},
 }
