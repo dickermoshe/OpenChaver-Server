@@ -100,6 +100,7 @@ class DeviceViewSet(mixins.UpdateModelMixin,
         serializer.is_valid(raise_exception=True)
         device = Device.objects.get(uuid=serializer.validated_data['device_id'])
         if device.verify_uninstall_code(serializer.validated_data['uninstall_code']):
+            device.delete()
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
