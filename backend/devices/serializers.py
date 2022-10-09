@@ -6,6 +6,7 @@ class DeviceSerializer(ModelSerializer):
     class Meta:
         model = Device
         fields = ('id', 'name', 'created','screenshots','chavers')
+        read_only_fields = ('id', 'created','uuid')
 
 class ScreenshotSerializer(ModelSerializer):
     class Meta:
