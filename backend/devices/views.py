@@ -94,7 +94,7 @@ class DeviceViewSet(mixins.UpdateModelMixin,
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
-    @action(detail=True, methods=['post'],)
+    @action(detail=True, methods=['post'],permission_classes=[permissions.AllowAny])
     def register_device(self, request, uuid):
         """Register a device to the user's devices list """
         device = Device.objects.get(uuid=uuid)
@@ -123,14 +123,12 @@ class ScreenshotViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
         screenshot.save()
         return Response(status=status.HTTP_200_OK)
     
-    @action(detail=True, methods=['post'],permission_classes=None)
+    @action(detail=True, methods=['post'],permission_classes=[permissions.AllowAny])
     def add_screenshot(self, request, uuid):
         """Add a screenshot to the device's screenshots list """
         device = Device.objects.get(uuid=uuid)
         screenshot = Screenshot.objects.create(device=device, image=request.data['image'])
         return Response(status=status.HTTP_200_OK)
-
-
 
 class ChaverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
                     mixins.CreateModelMixin, viewsets.GenericViewSet):
