@@ -11,10 +11,10 @@
 	--general-spacing: 1.5rem;
 
 	--red: #ff5555;
-    --yellow: #e2aa53;
-    --purple: #cfa4ff;
-    --cyan: #2dd9da;
-    --dim: #c9c9c9;
+	--yellow: #e2aa53;
+	--purple: #cfa4ff;
+	--cyan: #2dd9da;
+	--dim: #c9c9c9;
 }
 
 html,
@@ -27,29 +27,28 @@ body {
 body > div {
 	display: grid;
 	grid-template-rows: var(--header-height) auto;
-	grid-template-columns: 275px auto var(--general-spacing);
+	grid-template-columns: 275px var(--general-spacing) auto var(--general-spacing);
 	height: 100vh;
 }
 Header {
 	grid-row: 1;
-	grid-column: 1/4;
+	grid-column: 1/5;
 }
 aside {
 	grid-row: 2;
 	grid-column: 1;
 	background-color: var(--secondary-bg-color);
-	margin-right: var(--general-spacing);
 	padding-top: var(--general-spacing);
 	box-sizing: border-box;
 	border-right: 2px solid var(--default-border-color);
 }
 main {
 	grid-row: 2;
-	grid-column: 2;
+	grid-column: 3;
 	padding-top: var(--general-spacing);
 }
 main.fullWidth {
-	grid-column: 1/4;
+	grid-column: 1/5;
 }
 
 section > .container {
