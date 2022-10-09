@@ -12,8 +12,6 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
-
-    is_confirmed = models.BooleanField(default=False)
     
     is_active = models.BooleanField(
         _("active"),
