@@ -106,12 +106,24 @@ class DeviceViewSet(mixins.UpdateModelMixin, mixins.ListModelMixin,
         """Verify the uninstall code for the device"""
         serializer = VerifyUninstallCodeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        device = Device.objects.get(
+
+        try:    
+            device = Device.objects.get(
             uuid=serializer.validated_data['device_id'])
+        except Device.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         if device.verify_uninstall_code(
                 serializer.validated_data['uninstall_code']):
+            for chaver in device.chavers.all():
+                chaver: Chaver
+                logger.info(
+                    f"Sending uninstall email to {chaver.name} from device {device.name}"
+                )
+                chaver.send_uninstall_email()
             device.delete()
             return Response(status=status.HTTP_200_OK)
+
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @extend_schema(
@@ -183,18 +195,12 @@ class ChaverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
 
     def perform_create(self, serializer):
         serializer.save(device=self.request.data['device'])
-
-    def remove_chaver(self, request, pk=None):
+    
+    @extend_schema(request=None, responses={200: None})
+    @action(detail=True, methods=['post'])
+    def remove_chaver(self, request, pk):
         """This function removes a chaver from a device"""
-        chaver = Chaver.objects.get(id=pk)
-        # Send email to chaver
-        send_mail(
-            f'{chaver.device.user.email} removed you as a chaver.',
-            'This email is to inform you that you have been removed as a chaver from the device: '
-            + str(chaver.device.name),
-            settings.EMAIL_HOST_USER,
-            [chaver.email],
-            fail_silently=False,
-        )
+        chaver:Chaver = self.get_object()
+        chaver.send_uninstall_email()
         chaver.delete()
         return Response(status=status.HTTP_200_OK)
