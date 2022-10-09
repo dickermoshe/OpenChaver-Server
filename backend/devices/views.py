@@ -7,8 +7,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
+from drf_spectacular.utils import extend_schema, extend_schema_view
+
 from .models import Device, Screenshot, Chaver
-from .serializers import DeviceSerializer, ScreenshotSerializer, ChaverSerializer
+from .serializers import DeviceSerializer, ScreenshotSerializer, ChaverSerializer , RegisterDeviceSerializer
 
 
 class DevicePermission(permissions.BasePermission):
@@ -93,16 +95,26 @@ class DeviceViewSet(mixins.UpdateModelMixin,
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
-
-    @action(detail=True, methods=['post'],permission_classes=[permissions.AllowAny])
-    def register_device(self, request, uuid):
-        """Register a device to the user's devices list """
-        device = Device.objects.get(uuid=uuid)
-        device.registered = True
-        device.save()
-        return Response(status=status.HTTP_200_OK)
     
-
+    @extend_schema(
+        request=RegisterDeviceSerializer,
+        responses={200: DeviceSerializer}
+    )
+    @action(methods=['post'],permission_classes=[permissions.AllowAny])
+    def register_device(self, request):
+        """Register a device to the user's devices list """
+        serializer = RegisterDeviceSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:    
+            device = Device.objects.get(uuid=serializer.validated_data['code'])
+            if not device.registered:
+                device.registered = True
+                device.save()
+                return Response(DeviceSerializer(device).data, status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_403_FORBIDDEN)
+        except Device.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 # All all except delete
@@ -123,6 +135,7 @@ class ScreenshotViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
         screenshot.save()
         return Response(status=status.HTTP_200_OK)
     
+
     @action(detail=True, methods=['post'],permission_classes=[permissions.AllowAny])
     def add_screenshot(self, request, uuid):
         """Add a screenshot to the device's screenshots list """
