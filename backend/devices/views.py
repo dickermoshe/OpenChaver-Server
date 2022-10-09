@@ -100,7 +100,7 @@ class DeviceViewSet(mixins.UpdateModelMixin,
         request=RegisterDeviceSerializer,
         responses={200: DeviceSerializer}
     )
-    @action(methods=['post'],permission_classes=[permissions.AllowAny])
+    @action(detail=False,methods=['post'],permission_classes=[permissions.AllowAny])
     def register_device(self, request):
         """Register a device to the user's devices list """
         serializer = RegisterDeviceSerializer(data=request.data)
