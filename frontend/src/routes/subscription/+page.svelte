@@ -1,1 +1,1 @@
-<p>Our filtering service is currently free at no cost to the public.</p>
+<p>Filtering-as-a-service (FaaS) is currently provided at no cost to a private end user*.</p>

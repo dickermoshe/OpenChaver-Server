@@ -25,12 +25,12 @@
 		width: 100%;
 		padding: 0 var(--general-spacing);
 		box-sizing: border-box;
-		border-bottom: 2px solid #d7e4f4;
 		background-color: var(--default-bg-color);
+		border-bottom: 2px solid var(--default-border-color);
 		z-index: 100;
 	}
 	a {
-		color: var(--default-color);
+		color: var(--default-txt-color);
 		text-decoration: none;
 	}
 	h1 {
