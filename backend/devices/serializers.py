@@ -5,8 +5,8 @@ from .models import Device, Screenshot, Chaver
 class DeviceSerializer(ModelSerializer):
     class Meta:
         model = Device
-        fields = ('name','created','uuid','screenshots','chavers','id','latest_screenshot')
-        read_only_fields = ('created','uuid','screenshots','chavers','id','latest_screenshot')
+        fields = ('name','created','uuid','screenshots','chavers','id','latest_screenshot','user')
+        read_only_fields = ('created','uuid','screenshots','chavers','id','latest_screenshot','user')
 
 class ScreenshotSerializer(ModelSerializer):
     class Meta:

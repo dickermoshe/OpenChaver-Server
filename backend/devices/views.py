@@ -36,7 +36,12 @@ class ScreenShotPermission(permissions.BasePermission):
 class ChaverPermission(permissions.BasePermission):
     # Must be authenticated to access this view
     def has_permission(self, request, view):
-        return request.user.is_authenticated
+        # Check if the user is trying to add a new chaver
+        if request.method == 'POST':
+            device = Device.objects.get(id=request.data['device'])
+            return device.user == request.user
+        else:
+            return request.user.is_authenticated
 
     # Must be the owner of the device to access it
     # The device must be in the user's devices list
@@ -55,7 +60,7 @@ class DeviceViewSet(mixins.UpdateModelMixin,
         return self.queryset.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(chaver=self.request.user)
+        serializer.save(user=self.request.user)
 
     def remove_device(self, request, pk):
         """Remove a device from the user's devices list """
@@ -73,10 +78,36 @@ class DeviceViewSet(mixins.UpdateModelMixin,
         device.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @action(detail=True, methods=['post'])
+    def get_uninstall_code(self, request, pk):
+        """Get the uninstall code for the device"""
+        device = Device.objects.get(id=pk)
+        return Response(device.get_uninstall_code(), status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['post'])
+    def verify_uninstall_code(self, request, pk):
+        """Verify the uninstall code for the device"""
+        device = Device.objects.get(id=pk)
+        
+        if device.verify_uninstall_code(request.data['code']):
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
-# Allo all except delete
+    @action(detail=True, methods=['post'],)
+    def register_device(self, request, uuid):
+        """Register a device to the user's devices list """
+        device = Device.objects.get(uuid=uuid)
+        device.registered = True
+        device.save()
+        return Response(status=status.HTTP_200_OK)
+    
+
+
+
+# All all except delete
 class ScreenshotViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                        mixins.CreateModelMixin, viewsets.GenericViewSet):
+                        viewsets.GenericViewSet):
 
     queryset = Screenshot.objects.all()
     serializer_class = ScreenshotSerializer
@@ -85,15 +116,20 @@ class ScreenshotViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
     def get_queryset(self):
         return self.queryset.filter(device__user=self.request.user)
 
-    def perform_create(self, serializer):
-        serializer.save(device=self.request.user)
-
     @action(detail=True, methods=['post'])
     def false_positive(self, request, pk=None):
         screenshot = Screenshot.objects.get(id=pk)
         screenshot.false_positive = True
         screenshot.save()
         return Response(status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['post'],permission_classes=None)
+    def add_screenshot(self, request, uuid):
+        """Add a screenshot to the device's screenshots list """
+        device = Device.objects.get(uuid=uuid)
+        screenshot = Screenshot.objects.create(device=device, image=request.data['image'])
+        return Response(status=status.HTTP_200_OK)
+
 
 
 class ChaverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
@@ -106,7 +142,7 @@ class ChaverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
         return self.queryset.filter(device__user=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(device=self.request.user)
+        serializer.save(device=self.request.data['device'])
 
     def remove_chaver(self, request, pk=None):
         """This function removes a chaver from a device"""
