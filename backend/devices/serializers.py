@@ -19,5 +19,9 @@ class ChaverSerializer(s.ModelSerializer):
         fields = ('id', 'name', 'email',"device", 'created')
 
 class RegisterDeviceSerializer(s.Serializer):
-    code = s.CharField(max_length=100)
+    device_id = s.CharField(max_length=100)
+
+class VerifyUninstallCodeSerializer(s.Serializer):
+    device_id = s.CharField(max_length=100)
+    uninstall_code = s.CharField(max_length=100)
     

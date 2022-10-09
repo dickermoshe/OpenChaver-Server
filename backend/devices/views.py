@@ -10,7 +10,7 @@ from rest_framework.decorators import action
 from drf_spectacular.utils import extend_schema, extend_schema_view
 
 from .models import Device, Screenshot, Chaver
-from .serializers import DeviceSerializer, ScreenshotSerializer, ChaverSerializer , RegisterDeviceSerializer
+from .serializers import DeviceSerializer, ScreenshotSerializer, ChaverSerializer , RegisterDeviceSerializer,VerifyUninstallCodeSerializer
 
 
 class DevicePermission(permissions.BasePermission):
@@ -86,19 +86,27 @@ class DeviceViewSet(mixins.UpdateModelMixin,
         device = Device.objects.get(id=pk)
         return Response(device.get_uninstall_code(), status=status.HTTP_200_OK)
     
-    @action(detail=True, methods=['post'])
-    def verify_uninstall_code(self, request, pk):
+    @extend_schema(
+        request=VerifyUninstallCodeSerializer,
+        responses={
+            200: None,
+            400: None,
+        }
+    )
+    @action(detail=False, methods=['post'])
+    def verify_uninstall_code(self, request):
         """Verify the uninstall code for the device"""
-        device = Device.objects.get(id=pk)
-        
-        if device.verify_uninstall_code(request.data['code']):
+        serializer = VerifyUninstallCodeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        device = Device.objects.get(uuid=serializer.validated_data['device_id'])
+        if device.verify_uninstall_code(serializer.validated_data['uninstall_code']):
             return Response(status=status.HTTP_200_OK)
         else:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-    
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
     @extend_schema(
         request=RegisterDeviceSerializer,
-        responses={200: DeviceSerializer}
+        responses={200: DeviceSerializer, 400: None},
     )
     @action(detail=False,methods=['post'],permission_classes=[permissions.AllowAny])
     def register_device(self, request):
@@ -106,15 +114,15 @@ class DeviceViewSet(mixins.UpdateModelMixin,
         serializer = RegisterDeviceSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:    
-            device = Device.objects.get(uuid=serializer.validated_data['code'])
+            device = Device.objects.get(uuid=serializer.validated_data['device_id'])
             if not device.registered:
                 device.registered = True
                 device.save()
                 return Response(DeviceSerializer(device).data, status=status.HTTP_200_OK)
             else:
-                return Response(status=status.HTTP_403_FORBIDDEN)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
         except Device.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 # All all except delete
