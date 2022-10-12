@@ -17,3 +17,5 @@ export const load: PageServerLoad = ({ params }) => {
 		some: 'Account confirmed'
 	}
 }
+
+export const prerender = true
