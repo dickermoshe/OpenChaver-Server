@@ -37,17 +37,18 @@ Header {
 aside {
 	grid-row: 2;
 	grid-column: 1;
-	background-color: var(--secondary-bg-color);
+	/* background-color: var(--secondary-bg-color); */
 	padding-top: var(--general-spacing);
 	box-sizing: border-box;
-	border-right: 2px solid var(--default-border-color);
+	/* border-right: 2px solid var(--default-border-color); */
 }
 main {
 	grid-row: 2;
 	grid-column: 3;
 	padding-top: var(--general-spacing);
 }
-main.fullWidth {
+main.fullWidth,
+section {
 	grid-column: 1/5;
 }
 
