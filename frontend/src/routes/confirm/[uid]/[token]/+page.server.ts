@@ -18,4 +18,4 @@ export const load: PageServerLoad = ({ params }) => {
 	}
 }
 
-export const prerender = true
+export const prerender = false
