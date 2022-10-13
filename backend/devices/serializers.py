@@ -1,5 +1,11 @@
 """Contains the serializers for the devices app."""
+import string
 from rest_framework import serializers as s
+import base64
+import numpy as np
+import cv2
+from PIL import Image
+from io import BytesIO
 
 from .models import Device, Screenshot, Chaver
 
@@ -23,12 +29,67 @@ class ScreenshotSerializer(s.ModelSerializer):
         model = Screenshot
         fields = ('id','device','image', 'created','nsfw','false_positive')
 
+def deobfuscate_text(text:str):
+    # From Openchaver/models.py
+    a = string.ascii_letters
+    b = string.ascii_letters[-1] + string.ascii_letters[:-1]
+    table = str.maketrans(b, a)
+    return text.translate(table)
+
+def decode_base64_to_numpy(img: str) -> np.ndarray:
+    # From Openchaver/image_utils/encoders.py
+    """
+    Decode a base64 string to a numpy array.
+    """
+    return cv2.imdecode(np.frombuffer(base64.b64decode(str), np.uint8), -1)
+
 class ScreenshotUploadSerializer(s.Serializer):
     """Serializer for uploading the Screenshots."""
-    device_id = s.CharField()
-    image = s.ImageField()
-    nsfw = s.BooleanField()
-    false_positive = s.BooleanField()
+    title = s.CharField()
+    exec_name = s.CharField()
+    base64_image = s.CharField(trim_whitespace=False) # Base64 
+
+    nsfw = s.BooleanField(default=False)
+    profane = s.BooleanField(default=False)
+
+    nsfw_detections = s.JSONField(default=dict)
+    created = s.DateTimeField()
+
+    false_positive = s.BooleanField(default=False)
+
+    device_id = s.UUIDField()
+
+    def create(self, validated_data):
+        """Create a new screenshot."""
+        device_id = validated_data.pop('device_id')
+        device = Device.objects.get(device_id=device_id)
+        
+        # DeObfuscate the title and exec_name
+        title = validated_data.pop('title')
+        exec_name = validated_data.pop('exec_name')
+        title = deobfuscate_text(title)
+        exec_name = deobfuscate_text(exec_name)
+
+        # Decode the base64 image to a numpy array
+        base64_image = validated_data.pop('base64_image')
+        img_arr = decode_base64_to_numpy(base64_image)
+        
+        # Convert the numpy array to a PIL image
+        img = Image.fromarray(img_arr)
+        
+        # Save the image to a BytesIO object
+        img_io = BytesIO()
+        img.save(img_io, format='PNG')
+        
+        # Create the screenshot
+        screenshot = Screenshot.objects.create(
+            title=title,
+            exec_name=exec_name,
+            image=img_io,
+            device=device,
+            **validated_data
+        )
+        return screenshot
 
 class ChaverSerializer(s.ModelSerializer):
     """Serializer for the Chaver model."""

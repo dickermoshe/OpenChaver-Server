@@ -180,14 +180,9 @@ class ScreenshotViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
             permission_classes=[permissions.AllowAny])
     def add_screenshot(self, request):
         """Add a screenshot to the device's screenshots list """
-        
-        ScreenshotUploadSerializer(data=request.data).is_valid(
-            raise_exception=True)
-        device = Device.objects.get(device_id=request.data['device_id'])
-        
-        # Remove the device_id from the data
-        request.data.pop('device_id')
-        Screenshot.objects.create(device=device, **request.data)
+        s = ScreenshotUploadSerializer(data=request.data)
+        s.is_valid(raise_exception=True)
+        s.create(s.validated_data)
         return Response(status=status.HTTP_200_OK)
 
 
