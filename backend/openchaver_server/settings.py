@@ -36,7 +36,7 @@ DEBUG = True if os.getenv('DEBUG') == 'True' else False
 
 DEPLOY = True if os.getenv('DEPLOY') == 'True' else False
 
-ALLOWED_HOSTS = ['*'] if DEBUG else ['api.openchaver.com',]
+ALLOWED_HOSTS = ['*'] if DEBUG else ['api.openchaver.com','openchaver-server-production.up.railway.app']
 
 # Application definition
 INSTALLED_APPS = [
@@ -241,4 +241,5 @@ DJOSER = {
         'username_reset': 'djoser.email.UsernameResetEmail',
     }
 }
+
 SECURE_SSL_REDIRECT = True
