@@ -4,18 +4,18 @@ import type { PageServerLoad } from './$types'
 
 export const prerender = false
 
-export const load: PageServerLoad = ({ params }) => {
+export const load: PageServerLoad = async ({ params }) => {
 	const { token, uid } = params
 
-	api('POST', 'auth/users/activation/', {
+	const res = await api('POST', 'auth/users/activation/', {
 		token,
 		uid
 	})
 
-	throw redirect(307, '/dashboard')
+	if(res.status === 204) throw redirect(307, '/dashboard')
 
 	// on:fail | display error
 	return {
-		some: 'Account confirmed'
+		error: 'An error occured'
 	}
 }
