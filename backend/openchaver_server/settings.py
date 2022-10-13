@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'devices',
     'drf_spectacular',
     "corsheaders",
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
@@ -150,9 +151,20 @@ if DEPLOY:
     EMAIL_HOST_USER = 'mail@openchaver.com'
     EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
     DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    AWS_STORAGE_BUCKET_NAME = os.environ['R2_BUCKET_NAME']
+    AWS_S3_ENDPOINT_URL = f'https://{os.environ["R2_ACCOUNT_ID"]}.r2.cloudflarestorage.com'
+    AWS_S3_ACCESS_KEY_ID = os.environ['R2_ACCESS_KEY_ID']
+    AWS_S3_SECRET_ACCESS_KEY = os.environ['R2_SECRET_ACCESS_KEY']
+    AWS_S3_SIGNATURE_VERSION = 's3v4'
+
+
 else:
     EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
     EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
+    MEDIA_ROOT = BASE_DIR / 'media'
+    MEDIA_URL = '/media/'
 
 
 REST_FRAMEWORK = {
