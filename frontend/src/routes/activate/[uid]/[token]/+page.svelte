@@ -3,5 +3,11 @@
 	$: console.log(data)
 </script>
 
-An error occured while activating your account.<br />
-Reason: {data.error.detail}({data.status})
+<section>
+	<div class="container">
+		<p>
+			An error occured while activating your account.<br />
+			Reason: {data.error.detail}({data.status})
+		</p>
+	</div>
+</section>
