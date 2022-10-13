@@ -1,24 +1,17 @@
-Userflow
+# Standard userflow
 
-1. User signup
-openchaver.com/signup
-POST auth/users/
-```json
-{
-  "email": "user@example.com",
-  "password": "string"
-}
-```
+| Action                             | Frontend                                | API call                                |
+| ---------------------------------- | --------------------------------------- | --------------------------------------  |
+| 1.  User signup                    |`/signup`                                | POST `auth/users/`                      |
+| 2.  Confirm email link             |`openchaver.com/activate/[uid]/[token]`  | POST `auth/users/activation/`           |
+| 2a. Request another email link     |`/login` on:login of inactive account    | POST `auth/users/resend_activation/`    |
+| 3. Login                           |`/login`                                 | POST `auth/token/login/`                |
+| 3a. Logout                         |Button click                             | POST `auth/token/logout/`               |
+| 4. Add a device to account         |                                         | POST `/devices/`                        |
+| 5. Assign device to chaver         |                                         | POST `chavers`                          |
 
-2. User confirms email by clicking link
-openchaver.com/activate/[uid]/[token]
-POST auth/users/activation/
-```json
-{
-  "uid": "string",
-  "token": "string"
-}
-```
+*Note:* From 3a and on a `Authorization: 'Token {token}'` header is required on the request.
+
 
 2a. User requests another confirmation email
 POST auth/users/resend_activation/
@@ -27,19 +20,6 @@ POST auth/users/resend_activation/
   "email": "user@example.com"
 }
 ```
-
-3. Log user in
-openchaver.com/login
-POST auth/token/login/
-```json
-{
-  "password": "string",
-  "email": "string"
-}
-```
-
-3a. Log user out
-POST auth/token/logout/
 
 4. User adds a device *
 POST /devices/
@@ -57,9 +37,6 @@ POST /chavers/
   "email": "user@example.com"
 }
 ```
-
-
-Authorization: `Token {token}`
 
 // change email or password
 
