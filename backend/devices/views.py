@@ -182,8 +182,8 @@ class ScreenshotViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
         """Add a screenshot to the device's screenshots list """
         s = ScreenshotUploadSerializer(data=request.data)
         s.is_valid(raise_exception=True)
-        s.create(s.validated_data)
-        return Response(status=status.HTTP_200_OK)
+        screenshot = s.create(s.validated_data)
+        return Response(ScreenshotSerializer(screenshot).data,)
 
 
 class ChaverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
