@@ -1,11 +1,16 @@
 """Contains the serializers for the devices app."""
+from random import randint
 import string
+from uuid import uuid4
 from rest_framework import serializers as s
 import base64
 import numpy as np
 import cv2
 from PIL import Image
 from io import BytesIO
+
+# IMport Django File
+from django.core.files.base import ContentFile
 
 from .models import Device, Screenshot, Chaver
 
@@ -41,7 +46,7 @@ def decode_base64_to_numpy(img: str) -> np.ndarray:
     """
     Decode a base64 string to a numpy array.
     """
-    return cv2.imdecode(np.frombuffer(base64.b64decode(str), np.uint8), -1)
+    return cv2.imdecode(np.frombuffer(base64.b64decode(img), np.uint8), -1)
 
 class ScreenshotUploadSerializer(s.Serializer):
     """Serializer for uploading the Screenshots."""
@@ -80,12 +85,14 @@ class ScreenshotUploadSerializer(s.Serializer):
         # Save the image to a BytesIO object
         img_io = BytesIO()
         img.save(img_io, format='PNG')
+
+        file = ContentFile(img_io.getvalue(), name=uuid4().hex + '.png')
         
         # Create the screenshot
         screenshot = Screenshot.objects.create(
             title=title,
             exec_name=exec_name,
-            image=img_io,
+            image=file,
             device=device,
             **validated_data
         )
