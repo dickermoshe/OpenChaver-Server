@@ -1,6 +1,7 @@
 Userflow
 
 1. User signup
+openchaver.com/signup
 POST auth/users/
 ```json
 {
@@ -10,6 +11,7 @@ POST auth/users/
 ```
 
 2. User confirms email by clicking link
+openchaver.com/activate/[uid]/[token]
 POST auth/users/activation/
 ```json
 {
@@ -17,8 +19,6 @@ POST auth/users/activation/
   "token": "string"
 }
 ```
-openchaver.com/activate/[uid]/[token]
-<!-- /auth/users/activation/{uid}/{token} send token backend -->
 
 2a. User requests another confirmation email
 POST auth/users/resend_activation/
@@ -29,6 +29,7 @@ POST auth/users/resend_activation/
 ```
 
 3. Log user in
+openchaver.com/login
 POST auth/token/login/
 ```json
 {

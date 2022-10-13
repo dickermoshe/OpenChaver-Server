@@ -8,9 +8,9 @@
 
 <section>
 	<div class="container">
-		<h1>Please visit us again later</h1>
-		<p>Our site is not operational at the current time.</p>
-		<br />
+		<h1>Early tester access</h1>
+		Access your account: <a href="login">Login</a><br />
+		Create an account: <a href="signup">Signup</a><br />
 
 		<p>Demo our <a href="/dashboard" data-sveltekit-prefetch>dashboard</a> interface.</p>
 		<p>A demo desktop client link will be added soon.</p>
