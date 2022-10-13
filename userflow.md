@@ -1,14 +1,16 @@
 # Standard userflow
 
-| Action                             | Frontend                                | API call                                |
-| ---------------------------------- | --------------------------------------- | --------------------------------------  |
-| 1.  User signup                    |`/signup`                                | POST `auth/users/`                      |
-| 2.  Confirm email link             |`openchaver.com/activate/[uid]/[token]`  | POST `auth/users/activation/`           |
-| 2a. Request another email link     |`/login` on:login of inactive account    | POST `auth/users/resend_activation/`    |
-| 3. Login                           |`/login`                                 | POST `auth/token/login/`                |
-| 3a. Logout                         |Button click                             | POST `auth/token/logout/`               |
-| 4. Add a device to account         |                                         | POST `/devices/`                        |
-| 5. Assign device to chaver         |                                         | POST `chavers`                          |
+| Action                              | Frontend                                        | API call                                     |
+| ----------------------------------- | ----------------------------------------------- | -------------------------------------------- |
+| 1.  User signup                     | `/signup`                                       | POST `auth/users/`                           |
+| 2.  Confirm email link              | `openchaver.com/activate/[uid]/[token]`         | POST `auth/users/activation/`                |
+| 2a. Request another email link      | `/login` on:login of inactive account           | POST `auth/users/resend_activation/`         |
+| 2b. Request password reset link     | `/reset-password`                               | POST `auth/users/reset_password/`            |
+| 2c. Reset password                  | `openchaver.com/reset-password/[uid]/[token]`   | POST `auth/users/reset_password_confirm/`    |
+| 3.  Login                           | `/login`                                        | POST `auth/token/login/`                     |
+| 3a. Logout                          | Button click                                    | POST `auth/token/logout/`                    |
+| 4.  Add a device to account         |                                                 | POST `devices/`                              |
+| 5.  Assign device to chaver         |                                                 | POST `chavers/`                              |
 
 *Note:* From 3a and on a `Authorization: 'Token {token}'` header is required on the request.
 
