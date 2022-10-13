@@ -241,3 +241,4 @@ DJOSER = {
         'username_reset': 'djoser.email.UsernameResetEmail',
     }
 }
+SECURE_SSL_REDIRECT = True
