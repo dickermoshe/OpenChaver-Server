@@ -31,7 +31,7 @@
 		padding: 0;
 	}
 	nav li {
-		margin: 0 var(--general-spacing) 4px calc(var(--general-spacing) / 2);
+		margin-bottom: 4px;
 		border-radius: 8px;
 		color: var(--secondary-txt-color);
 		transition: all ease-in-out 75ms;

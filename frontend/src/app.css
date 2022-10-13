@@ -27,29 +27,29 @@ body {
 body > div {
 	display: grid;
 	grid-template-rows: var(--header-height) auto;
-	grid-template-columns: 275px var(--general-spacing) auto var(--general-spacing);
+	grid-template-columns: var(--general-spacing) 250px calc(var(--general-spacing) * 1.5) auto var(
+			--general-spacing
+		);
 	height: 100vh;
 }
 Header {
 	grid-row: 1;
-	grid-column: 1/5;
+	grid-column: 1/6;
 }
 aside {
 	grid-row: 2;
-	grid-column: 1;
-	/* background-color: var(--secondary-bg-color); */
+	grid-column: 2;
 	padding-top: var(--general-spacing);
 	box-sizing: border-box;
-	/* border-right: 2px solid var(--default-border-color); */
 }
 main {
 	grid-row: 2;
-	grid-column: 3;
+	grid-column: 4;
 	padding-top: var(--general-spacing);
 }
 main.fullWidth,
 section {
-	grid-column: 1/5;
+	grid-column: 1/6;
 }
 
 section > .container {

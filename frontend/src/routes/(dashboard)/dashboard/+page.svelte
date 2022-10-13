@@ -1,6 +1,4 @@
 <script lang="ts">
-	// import Devices from "./Devices.svelte"
-
 	const widgetData = [
 		{
 			title: 'Devices',
@@ -18,7 +16,7 @@
 		{
 			title: 'Subscription',
 			img: "data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' enable-background='new 0 0 24 24' height='24' viewBox='0 0 24 24' width='24'%3E%3Cg%3E%3Crect fill='none' height='24' width='24'/%3E%3Cpath d='M19,14V6c0-1.1-0.9-2-2-2H3C1.9,4,1,4.9,1,6v8c0,1.1,0.9,2,2,2h14C18.1,16,19,15.1,19,14z M17,14H3V6h14V14z M10,7 c-1.66,0-3,1.34-3,3s1.34,3,3,3s3-1.34,3-3S11.66,7,10,7z M23,7v11c0,1.1-0.9,2-2,2H4c0-1,0-0.9,0-2h17V7C22.1,7,22,7,23,7z'/%3E%3C/g%3E%3C/svg%3E",
-			prompt: 'Manage subscription',
+			prompt: 'Manage plan',
 			href: 'subscription'
 		}
 	]
@@ -33,14 +31,14 @@
 	{#each widgetData as data}
 		<div class="category" class:large={data.size === 'large'}>
 			<div class="header">
-				<!-- <img src="https://compass-ssl.microsoft.com/assets/f4/dc/f4dcc07f-010b-4bbb-9ef2-f51f02fe0b7e.svg?n=Devices_Icon_2.svg" alt=""> -->
 				<img src={data.img} alt="" />
 				<div class="title">{data.title}</div>
+				<!-- button to go to settings -->
 			</div>
 			<div class="body">
 				<a href={data.href} data-sveltekit-prefetch>{data.prompt}</a>
-				<!-- {#if data.title === 'Devices'}
-					<Devices />
+				<!-- {#if data.title === 'Subscription'}
+					<Subscription />
 				{:else}
 					<a href={data.href} data-sveltekit-prefetch>{data.prompt}</a>
 				{/if} -->
@@ -64,7 +62,7 @@
 	.category.large {
 		grid-column: 1/3;
 	}
-	.header {
+	.category .header {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
@@ -72,20 +70,20 @@
 		border-bottom: 1px solid var(--default-border-color);
 		background: var(--secondary-bg-color);
 	}
-	.header img {
+	.category .header img {
 		display: block;
 		height: 1.375rem;
 	}
-	.header .title {
+	.category .header .title {
 		padding-inline-start: calc(var(--general-spacing) / 2);
 		font-size: 0.875rem;
 		font-weight: 700;
 	}
-	.body {
+	.category .body {
 		padding: calc(var(--general-spacing) / 2) calc(var(--general-spacing) / 2);
 		background-color: var(--default-bg-color);
 	}
-	.body a {
+	.category .body a {
 		padding: calc(var(--general-spacing) / 1.5) 0;
 		display: block;
 		width: 100%;
