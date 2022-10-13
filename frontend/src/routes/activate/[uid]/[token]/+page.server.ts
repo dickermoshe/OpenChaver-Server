@@ -12,6 +12,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		uid
 	})
 
+	console.log(res.status)
 	if(res.status === 204) throw redirect(307, '/dashboard')
 
 	// on:fail | display error
