@@ -221,14 +221,23 @@ LOGGING = {
         },
     }
 }
-
+# FOr Djoser emails
+DOMAIN= 'openchaver.com'
+SITE_NAME = 'OpenChaver'
 DJOSER = {
     
     # TODO: Set this to the correct URL for the frontend
     # This is for the frontend developer to set
-    'PASSWORD_RESET_CONFIRM_URL': "https://openchaver.com/reset-password/{uid}/{token}",
-    'ACTIVATION_URL': 'https://openchaver.com/activate/{uid}/{token}',
-    "PASSWORD_CHANGED_EMAIL_CONFIRMATION" :False,
+    'PASSWORD_RESET_CONFIRM_URL': "reset-password/{uid}/{token}",
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {},
+    'EMAIL':{
+        'activation': 'djoser.email.ActivationEmail',
+        'confirmation': 'djoser.email.ConfirmationEmail',
+        'password_reset': 'djoser.email.PasswordResetEmail',
+        'password_changed_confirmation': 'djoser.email.PasswordChangedConfirmationEmail',
+        'username_changed_confirmation': 'djoser.email.UsernameChangedConfirmationEmail',
+        'username_reset': 'djoser.email.UsernameResetEmail',
+    }
 }
