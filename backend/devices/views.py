@@ -1,4 +1,5 @@
 import logging
+from urllib import request
 
 from django.core.mail import send_mail
 from django.conf import settings
@@ -13,7 +14,7 @@ from rest_framework.decorators import action
 from drf_spectacular.utils import extend_schema
 
 from .models import Device, Screenshot, Chaver
-from .serializers import DeviceSerializer, ScreenshotSerializer, ChaverSerializer, RegisterDeviceSerializer, VerifyUninstallCodeSerializer, UninstallCodeSerializer
+from .serializers import DeviceSerializer, ScreenshotSerializer, ChaverSerializer, RegisterDeviceSerializer, VerifyUninstallCodeSerializer, UninstallCodeSerializer,ScreenshotUploadSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -109,7 +110,7 @@ class DeviceViewSet(mixins.UpdateModelMixin, mixins.ListModelMixin,
 
         try:    
             device = Device.objects.get(
-            uuid=serializer.validated_data['device_id'])
+            device_id=serializer.validated_data['device_id'])
         except Device.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -142,7 +143,7 @@ class DeviceViewSet(mixins.UpdateModelMixin, mixins.ListModelMixin,
         serializer.is_valid(raise_exception=True)
         try:
             device = Device.objects.get(
-                uuid=serializer.validated_data['device_id'])
+                device_id=serializer.validated_data['device_id'])
             if not device.registered:
                 device.registered = True
                 device.save()
@@ -173,14 +174,20 @@ class ScreenshotViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
         screenshot.save()
         return Response(status=status.HTTP_200_OK)
 
-    @action(detail=True,
+    @extend_schema(request=ScreenshotUploadSerializer)
+    @action(detail=False,
             methods=['post'],
             permission_classes=[permissions.AllowAny])
-    def add_screenshot(self, request, uuid):
+    def add_screenshot(self, request):
         """Add a screenshot to the device's screenshots list """
-        device = Device.objects.get(uuid=uuid)
-        screenshot = Screenshot.objects.create(device=device,
-                                               image=request.data['image'])
+        
+        ScreenshotUploadSerializer(data=request.data).is_valid(
+            raise_exception=True)
+        device = Device.objects.get(device_id=request.data['device_id'])
+        
+        # Remove the device_id from the data
+        request.data.pop('device_id')
+        Screenshot.objects.create(device=device, **request.data)
         return Response(status=status.HTTP_200_OK)
 
 

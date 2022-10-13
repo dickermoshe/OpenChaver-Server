@@ -7,8 +7,8 @@ class DeviceSerializer(s.ModelSerializer):
     """This is the serializer for the Device model"""
     class Meta: # pylint: disable=missing-class-docstring
         model = Device
-        fields = ('id','user','name','uuid','created','registered','screenshots','chavers')
-        read_only_fields = ('created','uuid','screenshots','chavers','id','registered','user')
+        fields = ('id','user','name','device_id','created','registered','screenshots','chavers')
+        read_only_fields = ('created','device_id','screenshots','chavers','id','registered','user')
 
 class UninstallCodeSerializer(s.ModelSerializer):
     """Serializer for uninstall code"""
@@ -21,7 +21,14 @@ class ScreenshotSerializer(s.ModelSerializer):
     """Serializer for the Screenshot model."""
     class Meta: # pylint: disable=missing-class-docstring
         model = Screenshot
-        fields = ('id', 'image', 'created')
+        fields = ('id','device','image', 'created','nsfw','false_positive')
+
+class ScreenshotUploadSerializer(s.Serializer):
+    """Serializer for uploading the Screenshots."""
+    device_id = s.CharField()
+    image = s.ImageField()
+    nsfw = s.BooleanField()
+    false_positive = s.BooleanField()
 
 class ChaverSerializer(s.ModelSerializer):
     """Serializer for the Chaver model."""

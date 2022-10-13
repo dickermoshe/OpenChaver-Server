@@ -1,3 +1,5 @@
+from email.policy import default
+from enum import unique
 import uuid
 import logging
 from django.db import models
@@ -14,8 +16,8 @@ class Device(models.Model):
     user = models.ForeignKey(get_user_model(),
                              on_delete=models.CASCADE,
                              related_name='devices')
-    uninstall_code = models.CharField(default=uuid.uuid4(), max_length=255)
-    uuid = models.CharField(default=uuid.uuid4(), unique=True, max_length=255)
+    uninstall_code = models.CharField(default=uuid.uuid4, max_length=255)
+    device_id = models.CharField(default=uuid.uuid4, max_length=255,unique=True)
     name = models.CharField(max_length=100)
     registered = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -34,9 +36,11 @@ class Screenshot(models.Model):
     device = models.ForeignKey(Device,
                                on_delete=models.CASCADE,
                                related_name='screenshots')
+    nsfw = models.BooleanField(default=False)
     false_positive = models.BooleanField(default=False)
     image = models.ImageField(upload_to='images/')
     created = models.DateTimeField(auto_now_add=True)
+    
 
     def __str__(self):
         return self.device.name
