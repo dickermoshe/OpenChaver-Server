@@ -47,7 +47,7 @@
 				<p class="smallBody">Forgot your password and cannot login?<br /><a href="reset-password">Reset password</a></p>
 				<p class="error">{errs?.non_field_errors?.[0] ?? ''}</p>
 				<div class="buttonContainer">
-					<a href="/signup" class="button">Signup</a>
+					<a href="/signup" class="button" data-sveltekit-prefetch>Signup</a>
 					<input type="submit" value="Login" on:click|preventDefault={login} />
 				</div>
 			</form>
