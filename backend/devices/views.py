@@ -9,7 +9,8 @@ from rest_framework import permissions
 from rest_framework import status
 from rest_framework import serializers
 from rest_framework.response import Response
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action, api_view, authentication_classes,permission_classes
+from rest_framework.authentication import TokenAuthentication
 
 from drf_spectacular.utils import extend_schema
 
@@ -207,6 +208,8 @@ class ChaverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
         chaver.delete()
         return Response(status=status.HTTP_200_OK)
 
+@permission_classes([permissions.IsAdminUser])
+@authentication_classes([TokenAuthentication])
 @api_view(['POST'])
 def send_reports(request):
     """Send reports to all users"""
