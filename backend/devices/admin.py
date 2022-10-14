@@ -3,7 +3,6 @@ from django.contrib import admin
 # Register your models here.
 from .models import Device, Screenshot, Chaver
 
-
 @admin.action(description='Send reports for selected devices')
 def send_reports(modeladmin, request, queryset):
     for device in queryset:

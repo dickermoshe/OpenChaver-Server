@@ -5,5 +5,3 @@ def send_reports():
     devices = Device.objects.filter(registered=True)
     for device in devices:
         device.send_report()
-
-
