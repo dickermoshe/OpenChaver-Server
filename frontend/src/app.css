@@ -26,11 +26,12 @@ body {
 }
 body > div {
 	display: grid;
-	grid-template-rows: var(--header-height) auto;
+	grid-template-rows: var(--header-height) repeat(auto-fill, auto);
 	grid-template-columns: var(--general-spacing) 250px calc(var(--general-spacing) * 1.5) auto var(
 			--general-spacing
 		);
-	height: 100vh;
+	align-items: start;
+	/* height: 100vh; */
 }
 Header {
 	grid-row: 1;

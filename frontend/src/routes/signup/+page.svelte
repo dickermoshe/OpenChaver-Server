@@ -44,7 +44,7 @@
 				</div>
 				<!-- <p class="smallBody">Forgot your password and cannot login?<br /><a href="reset-password">Reset password</a></p> -->
 				<div class="buttonContainer">
-					<a href="/login" class="button">Login</a>
+					<a href="/login" class="button" data-sveltekit-prefetch>Login</a>
 					<input type="submit" value="Signup" on:click|preventDefault={register} />
 				</div>
 			</form>
