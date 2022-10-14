@@ -24,6 +24,37 @@ class Device(models.Model):
     def verify_uninstall_code(self, code):
         """This function verifies the uninstall code"""
         return code == self.uninstall_code
+    
+    def send_report(self,ids:list[int]):
+        """
+        This function sends a report to the user and all the chavers
+        params:
+            ids: list of ids of the screenshots to send
+        """
+        screenshots = self.screenshots.filter(id__in=ids)
+        tos = [self.user.email] + [chaver.email for chaver in self.chavers.all()]
+        subject = f"Report for {self.name}"
+        html_message = self.screenshots.model.create_report(screenshots)
+
+        if self.registered is None or html_message is None:
+            return
+
+        send_mail(subject,
+                    '',
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=tos,
+                    html_message=html_message,
+                    fail_silently=True)
+                    
+        
+
+
+
+        
+
+
+        
+        
 
     def __str__(self):
         return str(self.name)
@@ -53,6 +84,56 @@ class Screenshot(models.Model):
 
     def __str__(self):
         return self.device.name
+    
+    @classmethod
+    def create_report(cls,screenshots:list["Screenshot"]):
+        """This function creates a report for the screenshots"""
+        if not screenshots:
+            return
+        
+        # Create the report in raw html
+        html = f"""
+        <html>
+            <head>
+                <style>
+                    table {{
+                        border-collapse: collapse;
+                    }}
+                    table, th, td {{    
+                        border: 1px solid black;
+                    }}
+                </style>
+            </head>
+            <body>
+                <h1>Report for {screenshots[0].device.name}</h1>
+                <table>
+                    <tr>
+                        <th>Title</th>
+                        <th>Exec Name</th>
+                        <th>NSFW</th>
+                        <th>Profane</th>
+                        <th>False Positive</th>
+                    </tr>
+        """
+        for screenshot in screenshots:
+            html += f"""
+                    <tr>
+                        <td>{screenshot.title}</td>
+                        <td>{screenshot.exec_name}</td>
+                        <td>{screenshot.nsfw}</td>
+                        <td>{screenshot.profane}</td>
+                        <td>{screenshot.false_positive}</td>
+                    </tr>
+            """
+        html += """
+                </table>
+            </body>
+        </html>
+        """
+        return html
+
+        
+        
 
 
 GENERATED_UNINSTALL_CODE_MESSAGE = """
