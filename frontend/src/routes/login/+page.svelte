@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { api } from '$lib/api'
+	import { authToken } from '$lib/authToken'
 
 	let email: string, password: string, errs: any
 
@@ -11,8 +13,10 @@
 		errs = {}
 
 		if(res.status === 200) {
-			alert('user logged in [need to save user_token]')
-		} else if(res.status === 400) {
+			const data = await res.json()
+			$authToken = data.auth_token
+			goto('/dashboard')
+		} else if(res.status === 400 || res.status === 401) {
 			errs = await res.json()
 			console.log(errs)
 		}

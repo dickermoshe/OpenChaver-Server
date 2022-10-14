@@ -1,3 +1,8 @@
+import { authToken } from "./authToken"
+
+let token: any
+authToken.subscribe(val => token = val)
+
 const base = 'https://api.openchaver.com'
 
 export const api = (method: string, resource: string, data?: Record<string, unknown>) => {
@@ -5,8 +10,7 @@ export const api = (method: string, resource: string, data?: Record<string, unkn
 		method,
 		headers: {
 			'content-type': 'application/json',
-			// Authorization: `Token 3d1214170dd3cd1dbf1828736e94c4c0407b556c`
-			// 'Authorization': `Token {localStorage.authToken}`
+			Authorization: token? `Token ${token}`: ''
 		},
 		body: data && JSON.stringify(data)
 	})
