@@ -1,5 +1,7 @@
 import uuid
 import logging
+from datetime import datetime, timedelta
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
@@ -25,13 +27,21 @@ class Device(models.Model):
         """This function verifies the uninstall code"""
         return code == self.uninstall_code
     
-    def send_report(self,ids:list[int]):
+    def send_report(self):
         """
         This function sends a report to the user and all the chavers
         params:
             ids: list of ids of the screenshots to send
         """
-        screenshots = self.screenshots.filter(id__in=ids)
+        # Get screenshots from last 48 hours
+        screenshots = self.screenshots.filter(created__gte=timezone.now() - timedelta(hours=48))
+        
+        # Get screenshots that are nsfw
+        nsfw_screenshots = screenshots.filter(nsfw=True)
+
+        # Combine the screenshots and nsfw_screenshots
+        screenshots = screenshots | nsfw_screenshots
+        
         tos = [self.user.email] + [chaver.email for chaver in self.chavers.all()]
         subject = f"Report for {self.name}"
         html_message = self.screenshots.model.create_report(screenshots)
@@ -45,7 +55,7 @@ class Device(models.Model):
                     recipient_list=tos,
                     html_message=html_message,
                     fail_silently=True)
-                    
+
         
 
 
