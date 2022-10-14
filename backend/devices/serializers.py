@@ -6,6 +6,7 @@ from .models import Device, Screenshot, Chaver
 
 class DeviceSerializer(s.ModelSerializer):
     """This is the serializer for the Device model"""
+    user = s.HiddenField(default=s.CurrentUserDefault())
     class Meta: # pylint: disable=missing-class-docstring
         model = Device
         fields = ('id','user','name','device_id','created','registered','screenshots','chavers')

@@ -58,7 +58,7 @@ class ChaverPermission(permissions.BasePermission):
         return obj.device.user == request.user
 
 
-class DeviceViewSet(mixins.UpdateModelMixin, mixins.ListModelMixin,
+class DeviceViewSet(mixins.DestroyModelMixin,mixins.UpdateModelMixin, mixins.ListModelMixin,
                     mixins.RetrieveModelMixin, mixins.CreateModelMixin,
                     viewsets.GenericViewSet):
     queryset = Device.objects.all()
@@ -67,9 +67,6 @@ class DeviceViewSet(mixins.UpdateModelMixin, mixins.ListModelMixin,
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
 
     @extend_schema(request=None, responses={200: UninstallCodeSerializer})
     @action(detail=True,
@@ -166,14 +163,15 @@ class ScreenshotViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
 
     def get_queryset(self):
         return self.queryset.filter(device__user=self.request.user)
-
+    
+    @extend_schema(request=None, responses={200: ScreenshotSerializer})
     @action(detail=True, methods=['post'])
     def false_positive(self, request, pk=None):
         """This endpoint is for a user or chaver to declare a screenshot as a false positive"""
         screenshot = Screenshot.objects.get(id=pk)
         screenshot.false_positive = True
         screenshot.save()
-        return Response(status=status.HTTP_200_OK)
+        return Response(ScreenshotSerializer(screenshot).data)
 
     @extend_schema(request=ScreenshotUploadSerializer)
     @action(detail=False,
@@ -199,14 +197,13 @@ class ChaverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
     def perform_create(self, serializer):
         serializer.save(device=self.request.data['device'])
     
-    @extend_schema(request=None, responses={200: None})
-    @action(detail=True, methods=['post'])
-    def remove_chaver(self, request, pk):
-        """This function removes a chaver from a device"""
+    def destroy(self, request, *args, **kwargs):
         chaver:Chaver = self.get_object()
         chaver.send_uninstall_email()
-        chaver.delete()
-        return Response(status=status.HTTP_200_OK)
+        return super().destroy(request, *args, **kwargs)
+
+
+
 
 @permission_classes([permissions.IsAdminUser])
 @authentication_classes([TokenAuthentication])
