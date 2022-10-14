@@ -1,22 +1,18 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { api } from '$lib/api'
-	import { authToken } from '$lib/authToken'
 
 	let email: string, password: string, errs: any
 
-	const login = async () => {
-		const res = await api('POST', 'auth/token/login/', {
+	const register = async () => {
+		const res = await api('POST', 'auth/users/', {
 			email,
 			password
 		})
 		errs = {}
 
-		if(res.status === 200) {
-			const data = await res.json()
-			$authToken = data.auth_token
-			goto('/dashboard')
-		} else if(res.status === 400 || res.status === 401) {
+		if(res.status === 201) {
+			alert('confirm email')
+		} else if(res.status === 400) {
 			errs = await res.json()
 			console.log(errs)
 		}
@@ -24,31 +20,32 @@
 </script>
 
 <svelte:head>
-	<title>Login | OpenChaver</title>
+	<title>Signup | OpenChaver</title>
 	<meta
 		name="description"
-		content="Login to your account to configure your content filtering setup."
+		content="Setup an account to access our content filtering services."
 	/>
 </svelte:head>
 
 <section>
 	<div class="container">
 		<div class="signupContainer form">
-			<h3>Login to OpenChaver</h3>
-			<form action="https://api.openchaver.com/auth/token/login/" method="POST">
+			<h3>Signup for OpenChaver</h3>
+			<form action="https://api.openchaver.com/auth/users/" method="POST">
 				<div class="inputContainer">
 					<label for="email">Email</label>
-					<input bind:value={email} type="email" name="email" id="email" />
+					<input bind:value={email} type="email" name="email" id="email" autocomplete="email" />
+					<div class="error smallBody">{errs?.email?.[0] ?? ''}</div>
 				</div>
 				<div class="inputContainer">
 					<label for="password">Password</label>
-					<input bind:value={password} type="password" name="password" id="password" />
+					<input bind:value={password} type="password" name="password" id="password" autocomplete="new-password" />
+					<div class="error smallBody">{errs?.password?.[0] ?? ''}&nbsp;</div>
 				</div>
-				<p class="smallBody">Forgot your password and cannot login?<br /><a href="reset-password">Reset password</a></p>
-				<p class="error">{errs?.non_field_errors?.[0] ?? ''}</p>
+				<!-- <p class="smallBody">Forgot your password and cannot login?<br /><a href="reset-password">Reset password</a></p> -->
 				<div class="buttonContainer">
-					<a href="/signup" class="button">Signup</a>
-					<input type="submit" value="Login" on:click|preventDefault={login} />
+					<a href="/login" class="button">Login</a>
+					<input type="submit" value="Signup" on:click|preventDefault={register} />
 				</div>
 			</form>
 		</div>
@@ -81,7 +78,7 @@
 		display: block;
 		margin-top: calc(var(--general-spacing) / 3);
 	}
-	.error {
+	.inputContainer .error {
 		margin-top: calc(var(--general-spacing) / 3);
 		color: var(--red);
 	}

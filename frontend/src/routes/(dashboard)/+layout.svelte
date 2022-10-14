@@ -1,5 +1,11 @@
 <script lang="ts">
+	import { browser } from '$app/environment'
+	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
+	import { authToken } from '$lib/authToken'
+	
+	// Send user to /login page if not authenticated
+	if(!$authToken && browser) goto('/login')
 
 	const routes = ['dashboard', 'devices', 'accountabilty', 'account', 'subscription']
 </script>

@@ -42,13 +42,13 @@
 <section>
 	{#each devices as device}
 		<div class="category row">
-			<img src="{device.form_factor}.png" alt="" />
+			<img src="{device.form_factor}.png" alt={device.form_factor} />
 			<div class="stats">
 				<div class="largeText">{device.name}</div>
 				<div class="subText">{device.model}</div>
 				<div class="subText">{device.os}</div>
 				<div class="subText">Chaver: {device.chaver.name}</div>
-				<a href="">Edit details</a>
+				<a href="#_">Edit details</a>
 			</div>
 		</div>
 	{/each}

@@ -1,5 +1,9 @@
 <script lang="ts">
+	import { page } from "$app/stores"
+	import { authToken } from "./authToken"
+
 	const logout = async () => {
+		$authToken = ''
 		await fetch('https://api.openchaver.com/auth/token/logout/', {
 			method: 'POST'
 		})
@@ -12,7 +16,13 @@
 		<h1>OpenChaver</h1>
 	</a>
 	<div class="buttons">
-		<!-- <a href="../" style='color: var(--secondary-color);'>Logout</a> -->
+		{#if ($page.routeId?.search(/\(dashboard\)\//) ?? -1) > -1}
+			<a href="../" on:click|preventDefault={logout}>Logout</a>
+		{:else if $authToken}
+			<a href="/dashboard">Dashboard</a>
+		{:else}
+			<a href="/login">Login</a>
+		{/if}
 	</div>
 </header>
 

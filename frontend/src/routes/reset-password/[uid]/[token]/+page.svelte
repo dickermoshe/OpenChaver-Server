@@ -1,22 +1,22 @@
-<script lang="ts">
-	import { goto } from '$app/navigation';
+<script lang='ts'>
 	import { api } from '$lib/api'
-	import { authToken } from '$lib/authToken'
 
-	let email: string, password: string, errs: any
+	export let data: any
 
-	const login = async () => {
-		const res = await api('POST', 'auth/token/login/', {
-			email,
-			password
+	const { token, uid } = data
+	let new_password: string, errs: any
+
+	const resetPswd = async () => {
+		const res = await api('POST', 'auth/users/reset_password_confirm/', {
+			token,
+			uid,
+			new_password
 		})
 		errs = {}
 
-		if(res.status === 200) {
-			const data = await res.json()
-			$authToken = data.auth_token
-			goto('/dashboard')
-		} else if(res.status === 400 || res.status === 401) {
+		if(res.status === 204) {
+			window.location.href = '/login'
+		} else if(res.status === 400) {
 			errs = await res.json()
 			console.log(errs)
 		}
@@ -24,31 +24,26 @@
 </script>
 
 <svelte:head>
-	<title>Login | OpenChaver</title>
+	<title>Reset password | OpenChaver</title>
 	<meta
 		name="description"
-		content="Login to your account to configure your content filtering setup."
+		content="Reset your password to access your account."
 	/>
 </svelte:head>
 
 <section>
 	<div class="container">
 		<div class="signupContainer form">
-			<h3>Login to OpenChaver</h3>
-			<form action="https://api.openchaver.com/auth/token/login/" method="POST">
+			<h3>Reset password</h3>
+			<form action="https://api.openchaver.com/auth/users/reset_password_confirm/" method="POST">
 				<div class="inputContainer">
-					<label for="email">Email</label>
-					<input bind:value={email} type="email" name="email" id="email" />
+					<label for="passsword">New password</label>
+					<input bind:value={new_password} type="password" name="passsword" id="passsword" autocomplete="new-password" />
+					<div class="error smallBody">{errs?.new_password?.[0] ?? ''}</div>
 				</div>
-				<div class="inputContainer">
-					<label for="password">Password</label>
-					<input bind:value={password} type="password" name="password" id="password" />
-				</div>
-				<p class="smallBody">Forgot your password and cannot login?<br /><a href="reset-password">Reset password</a></p>
-				<p class="error">{errs?.non_field_errors?.[0] ?? ''}</p>
 				<div class="buttonContainer">
-					<a href="/signup" class="button">Signup</a>
-					<input type="submit" value="Login" on:click|preventDefault={login} />
+					<a href="/login" class="button">Login</a>
+					<input type="submit" value="Set Password" on:click|preventDefault={resetPswd} />
 				</div>
 			</form>
 		</div>
@@ -81,7 +76,7 @@
 		display: block;
 		margin-top: calc(var(--general-spacing) / 3);
 	}
-	.error {
+	.inputContainer .error {
 		margin-top: calc(var(--general-spacing) / 3);
 		color: var(--red);
 	}
