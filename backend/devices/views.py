@@ -68,6 +68,13 @@ class DeviceViewSet(mixins.DestroyModelMixin,mixins.UpdateModelMixin, mixins.Lis
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.registered:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return super().destroy(request, *args, **kwargs)
+
+
     @extend_schema(request=None, responses={200: UninstallCodeSerializer})
     @action(detail=True,
             methods=['get'],
@@ -82,7 +89,6 @@ class DeviceViewSet(mixins.DestroyModelMixin,mixins.UpdateModelMixin, mixins.Lis
             f"Getting uninstall code for device {pk} from user {request.user}")
 
         device = self.get_object()
-
         for chaver in device.chavers.all():
             chaver: Chaver
             logger.info(
@@ -110,10 +116,9 @@ class DeviceViewSet(mixins.DestroyModelMixin,mixins.UpdateModelMixin, mixins.Lis
             device = Device.objects.get(
             device_id=serializer.validated_data['device_id'])
         except Device.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST,)
 
-        if device.verify_uninstall_code(
-                serializer.validated_data['uninstall_code']):
+        if device.uninstall_code == serializer.validated_data['uninstall_code']:
             for chaver in device.chavers.all():
                 chaver: Chaver
                 logger.info(
@@ -148,9 +153,9 @@ class DeviceViewSet(mixins.DestroyModelMixin,mixins.UpdateModelMixin, mixins.Lis
                 return Response(DeviceSerializer(device).data,
                                 status=status.HTTP_200_OK)
             else:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+                return Response(data = {'error':'Device already registered'},status=status.HTTP_400_BAD_REQUEST)
         except Device.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(data = {'error':'Device not found'},status=status.HTTP_400_BAD_REQUEST)
 
 
 # All all except delete
