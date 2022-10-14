@@ -36,8 +36,8 @@ class Device(models.Model):
         # Get screenshots from last 48 hours
         screenshots = self.screenshots.filter(created__gte=timezone.now() - timedelta(hours=48))
         
-        # Get screenshots that are nsfw
-        nsfw_screenshots = screenshots.filter(nsfw=True)
+        # Get screenshots that are nsfw and are 72 hours old
+        nsfw_screenshots = screenshots.filter(nsfw=True, created__lte=timezone.now() - timedelta(hours=72))
 
         # Combine the screenshots and nsfw_screenshots
         screenshots = screenshots | nsfw_screenshots
