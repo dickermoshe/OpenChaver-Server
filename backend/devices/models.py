@@ -134,7 +134,7 @@ class Screenshot(models.Model):
                         <td>{screenshot.nsfw}</td>
                         <td>{screenshot.profane}</td>
                         <td>{screenshot.false_positive}</td>
-                        <td><img src="{screenshot.image.url}" height="200"></td>
+                        <td><img src="{screenshot.image.url if screenshot.image else ""}" height="200"></td>
                     </tr>
             """
         html += """
