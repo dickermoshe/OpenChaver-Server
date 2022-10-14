@@ -18,6 +18,10 @@
 	<div class="buttons">
 		{#if ($page.routeId?.search(/\(dashboard\)\//) ?? -1) > -1}
 			<a href="../" on:click|preventDefault={logout}>Logout</a>
+		{:else if $authToken}
+			<a href="/dashboard">Dashboard</a>
+		{:else}
+			<a href="/login">Login</a>
 		{/if}
 	</div>
 </header>
