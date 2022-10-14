@@ -101,7 +101,7 @@ class Screenshot(models.Model):
         if not screenshots:
             return
         
-        # Create the report in raw html
+        # Create the report in raw html - Include the images and the title
         html = f"""
         <html>
             <head>
@@ -123,6 +123,7 @@ class Screenshot(models.Model):
                         <th>NSFW</th>
                         <th>Profane</th>
                         <th>False Positive</th>
+                        <th>Image</th>
                     </tr>
         """
         for screenshot in screenshots:
@@ -133,6 +134,7 @@ class Screenshot(models.Model):
                         <td>{screenshot.nsfw}</td>
                         <td>{screenshot.profane}</td>
                         <td>{screenshot.false_positive}</td>
+                        <td><img src="{screenshot.image.url}" height="200"></td>
                     </tr>
             """
         html += """
