@@ -14,8 +14,8 @@ from rest_framework.authentication import TokenAuthentication
 
 from drf_spectacular.utils import extend_schema
 
-from .models import Device, Screenshot, Chaver
-from .serializers import DeviceSerializer, ScreenshotSerializer, ChaverSerializer, RegisterDeviceSerializer, VerifyUninstallCodeSerializer, UninstallCodeSerializer,ScreenshotUploadSerializer
+from .models import Device, Screenshot, Chaver, Log
+from .serializers import DeviceSerializer, ScreenshotSerializer, ChaverSerializer, RegisterDeviceSerializer, VerifyUninstallCodeSerializer, UninstallCodeSerializer,ScreenshotUploadSerializer, LogSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +64,7 @@ class DeviceViewSet(mixins.DestroyModelMixin,mixins.UpdateModelMixin, mixins.Lis
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
     permission_classes = [DevicePermission]
+    lookup_url_kwarg = 'device_id'
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
@@ -207,6 +208,11 @@ class ChaverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
         chaver.send_uninstall_email()
         return super().destroy(request, *args, **kwargs)
 
+    
+class LogViewSet(mixins.CreateModelMixin,
+                 viewsets.GenericViewSet):
+    queryset = Log.objects.all()
+    serializer_class = LogSerializer
 
 
 

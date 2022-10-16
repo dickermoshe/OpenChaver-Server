@@ -237,3 +237,15 @@ class Chaver(models.Model):
 
     def __str__(self):
         return self.device.name
+
+class Log(models.Model):
+    """This is the model for the Logs"""
+    device = models.ForeignKey(Device,
+                                 on_delete=models.CASCADE,
+                                    related_name='logs')
+                                    
+    created = models.DateTimeField(auto_now_add=True)
+    log = models.TextField()
+
+    def __str__(self):
+        return self.device.name

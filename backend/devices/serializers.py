@@ -1,8 +1,7 @@
 """Contains the serializers for the devices app."""
 from rest_framework import serializers as s
-from django.core.files.base import ContentFile
 
-from .models import Device, Screenshot, Chaver
+from .models import Device, Screenshot, Chaver, Log
 
 class DeviceSerializer(s.ModelSerializer):
     """This is the serializer for the Device model"""
@@ -86,3 +85,19 @@ class VerifyUninstallCodeSerializer(s.Serializer):# pylint: disable=abstract-met
     device_id = s.CharField(max_length=100)
     uninstall_code = s.CharField(max_length=100)
     
+class LogSerializer(s.ModelSerializer):
+    """Serializer for the Log model."""
+    device_id = s.CharField(max_length=100)
+    class Meta: # pylint: disable=missing-class-docstring
+        model = Log
+        fields = ('logs')
+    
+    def create(self, validated_data):
+        """Create a new log."""
+        device_id = validated_data.pop('device_id')
+        device = Device.objects.get(device_id=device_id)
+        log = Log.objects.create(
+            device=device,
+            **validated_data
+        )
+        return log

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Device, Screenshot, Chaver
+from .models import Device, Screenshot, Chaver, Log
 
 @admin.action(description='Send reports for selected devices')
 def send_reports(modeladmin, request, queryset):
@@ -14,3 +14,4 @@ class DeviceAdmin(admin.ModelAdmin):
 admin.site.register(Device, DeviceAdmin)
 admin.site.register(Screenshot)
 admin.site.register(Chaver)
+admin.site.register(Log)
