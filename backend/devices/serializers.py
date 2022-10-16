@@ -90,7 +90,7 @@ class LogSerializer(s.ModelSerializer):
     device_id = s.CharField(max_length=100)
     class Meta: # pylint: disable=missing-class-docstring
         model = Log
-        fields = ('logs',)
+        fields = ('logs','device_id')
     
     def create(self, validated_data):
         """Create a new log."""
