@@ -76,51 +76,6 @@ class DeviceViewSet(mixins.DestroyModelMixin,mixins.UpdateModelMixin, mixins.Lis
         return super().destroy(request, *args, **kwargs)
 
 
-    @extend_schema(request=None, responses={200: UninstallCodeSerializer})
-    @action(detail=True,
-            methods=['get'],
-            permission_classes=[DevicePermission])
-    def uninstall_code(self, request, pk):
-        """
-        Get the uninstall code for the device
-        The only way to remove a device from the user's devices list is to use the uninstall code
-        """
-
-        logger.info(
-            f"Getting uninstall code for device {pk} from user {request.user}")
-
-        device = self.get_object()
-        for chaver in device.chavers.all():
-            chaver: Chaver
-            logger.info(
-                f"Sending uninstall email to {chaver.name} from device {device.name}"
-            )
-            chaver.send_uninstall_email()
-
-        return Response(UninstallCodeSerializer(device).data,
-                        status=status.HTTP_200_OK)
-
-    @extend_schema(request=VerifyUninstallCodeSerializer,
-                   responses={
-                       200: None,
-                       400: None,
-                   })
-    @action(detail=True,
-            methods=['post'],
-            permission_classes=[permissions.AllowAny])
-    def verify_uninstall_code(self, request,pk):
-        """Verify the uninstall code for the device"""
-        logger.info(f"Verifying uninstall code for device {pk}")
-        device = self.get_object()
-        serializer = VerifyUninstallCodeSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        if serializer.validated_data['uninstall_code'] == device.uninstall_code:
-            device.delete()
-            return Response(status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        
-
     @extend_schema(
         request=None,
         responses={
