@@ -85,8 +85,7 @@ class DeviceViewSet(mixins.DestroyModelMixin,mixins.UpdateModelMixin, mixins.Lis
     )
     @action(detail=True,
             methods=['post'],
-            permission_classes=[permissions.AllowAny],
-            authentication_classes=[])
+            permission_classes=[permissions.AllowAny])
     def register_device(self, request,pk):
         """Register a device to the user's devices list """
         device = Device.objects.get(id=pk)
@@ -101,8 +100,7 @@ class DeviceViewSet(mixins.DestroyModelMixin,mixins.UpdateModelMixin, mixins.Lis
     @extend_schema(request=ScreenshotUploadSerializer)
     @action(detail=True,
             methods=['post'],
-            permission_classes=[permissions.AllowAny],
-            authentication_classes=[])
+            permission_classes=[permissions.AllowAny])
     def add_screenshot(self, request, pk):
         """Add a screenshot to the device's screenshots list """
         device = Device.objects.get(id=pk)
