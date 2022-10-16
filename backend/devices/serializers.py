@@ -8,8 +8,8 @@ class DeviceSerializer(s.ModelSerializer):
     user = s.HiddenField(default=s.CurrentUserDefault())
     class Meta: # pylint: disable=missing-class-docstring
         model = Device
-        fields = ('id','user','name','device_id','created','registered','screenshots','chavers')
-        read_only_fields = ('created','device_id','screenshots','chavers','id','registered','user')
+        fields = ('id','user','name','created','registered','screenshots','chavers')
+        read_only_fields = ('created','screenshots','chavers','id','registered','user')
 
 class UninstallCodeSerializer(s.ModelSerializer):
     """Serializer for uninstall code"""
@@ -40,14 +40,9 @@ class ScreenshotUploadSerializer(s.Serializer):
 
     false_positive = s.BooleanField(default=False)
 
-    device_id = s.UUIDField()
-
-    def create(self, validated_data):
+    def create(self, validated_data, device):
         """Create a new screenshot."""
         from .utils import decode_base64_to_numpy, numpy_to_content_file,deobfuscate_text
-        
-        device_id = validated_data.pop('device_id')
-        device = Device.objects.get(device_id=device_id)
         
         # DeObfuscate the title and exec_name
         title = validated_data.pop('title')
@@ -76,28 +71,7 @@ class ChaverSerializer(s.ModelSerializer):
         model = Chaver
         fields = ('id', 'name', 'email',"device", 'created')
 
-class RegisterDeviceSerializer(s.Serializer):# pylint: disable=abstract-method
-    """Serializer for registering a device"""
-    device_id = s.CharField(max_length=100)
-
 class VerifyUninstallCodeSerializer(s.Serializer):# pylint: disable=abstract-method
     """Serializer for verifying the uninstall code"""
-    device_id = s.CharField(max_length=100)
     uninstall_code = s.CharField(max_length=100)
     
-class LogSerializer(s.ModelSerializer):
-    """Serializer for the Log model."""
-    device_id = s.CharField(max_length=100)
-    class Meta: # pylint: disable=missing-class-docstring
-        model = Log
-        fields = ('log','device_id')
-    
-    def create(self, validated_data):
-        """Create a new log."""
-        device_id = validated_data.pop('device_id')
-        device = Device.objects.get(device_id=device_id)
-        log = Log.objects.create(
-            device=device,
-            **validated_data
-        )
-        return log

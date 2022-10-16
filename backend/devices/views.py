@@ -14,8 +14,8 @@ from rest_framework.authentication import TokenAuthentication
 
 from drf_spectacular.utils import extend_schema
 
-from .models import Device, Screenshot, Chaver, Log
-from .serializers import DeviceSerializer, ScreenshotSerializer, ChaverSerializer, RegisterDeviceSerializer, VerifyUninstallCodeSerializer, UninstallCodeSerializer,ScreenshotUploadSerializer, LogSerializer
+from .models import Device, Screenshot, Chaver
+from .serializers import DeviceSerializer, ScreenshotSerializer, ChaverSerializer, VerifyUninstallCodeSerializer, UninstallCodeSerializer,ScreenshotUploadSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +64,7 @@ class DeviceViewSet(mixins.DestroyModelMixin,mixins.UpdateModelMixin, mixins.Lis
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
     permission_classes = [DevicePermission]
-    lookup_url_kwarg = 'device_id'
+
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
@@ -105,59 +105,54 @@ class DeviceViewSet(mixins.DestroyModelMixin,mixins.UpdateModelMixin, mixins.Lis
                        200: None,
                        400: None,
                    })
-    @action(detail=False,
+    @action(detail=True,
             methods=['post'],
             permission_classes=[permissions.AllowAny])
-    def verify_uninstall_code(self, request):
+    def verify_uninstall_code(self, request,pk):
         """Verify the uninstall code for the device"""
+        logger.info(f"Verifying uninstall code for device {pk}")
+        device = self.get_object()
         serializer = VerifyUninstallCodeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        try:    
-            device = Device.objects.get(
-            device_id=serializer.validated_data['device_id'])
-        except Device.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST,)
-
-        if device.uninstall_code == serializer.validated_data['uninstall_code']:
-            for chaver in device.chavers.all():
-                chaver: Chaver
-                logger.info(
-                    f"Sending uninstall email to {chaver.name} from device {device.name}"
-                )
-                chaver.send_uninstall_email()
+        if serializer.validated_data['uninstall_code'] == device.uninstall_code:
             device.delete()
             return Response(status=status.HTTP_200_OK)
-
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
 
     @extend_schema(
-        request=RegisterDeviceSerializer,
+        request=None,
         responses={
-            200: DeviceSerializer,
+            200: None,
             400: None
         },
     )
-    @action(detail=False,
+    @action(detail=True,
             methods=['post'],
             permission_classes=[permissions.AllowAny])
-    def register_device(self, request):
+    def register_device(self, request,pk):
         """Register a device to the user's devices list """
-        serializer = RegisterDeviceSerializer(data=request.data)
+        device = Device.objects.get(id=pk)
+        if device.registered:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            logger.info(f"Device {pk} registered to user {request.user}")
+            device.registered = True
+            device.save()
+            return Response(status=status.HTTP_200_OK)
+    
+    @extend_schema(request=ScreenshotUploadSerializer)
+    @action(detail=True,
+            methods=['post'],
+            permission_classes=[permissions.AllowAny])
+    def add_screenshot(self, request, pk):
+        """Add a screenshot to the device's screenshots list """
+        device = Device.objects.get(id=pk)
+        serializer = ScreenshotUploadSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        try:
-            device = Device.objects.get(
-                device_id=serializer.validated_data['device_id'])
-            if not device.registered:
-                device.registered = True
-                device.save()
-                return Response(DeviceSerializer(device).data,
-                                status=status.HTTP_200_OK)
-            else:
-                return Response(data = {'error':'Device already registered'},status=status.HTTP_400_BAD_REQUEST)
-        except Device.DoesNotExist:
-            return Response(data = {'error':'Device not found'},status=status.HTTP_400_BAD_REQUEST)
-
+        serializer.create(serializer.validated_data, device)
+        return Response(status=status.HTTP_200_OK)
 
 # All all except delete
 class ScreenshotViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
@@ -179,16 +174,6 @@ class ScreenshotViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
         screenshot.save()
         return Response(ScreenshotSerializer(screenshot).data)
 
-    @extend_schema(request=ScreenshotUploadSerializer)
-    @action(detail=False,
-            methods=['post'],
-            permission_classes=[permissions.AllowAny])
-    def add_screenshot(self, request):
-        """Add a screenshot to the device's screenshots list """
-        s = ScreenshotUploadSerializer(data=request.data)
-        s.is_valid(raise_exception=True)
-        screenshot = s.create(s.validated_data)
-        return Response(ScreenshotSerializer(screenshot).data,)
 
 
 class ChaverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
@@ -207,12 +192,6 @@ class ChaverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
         chaver:Chaver = self.get_object()
         chaver.send_uninstall_email()
         return super().destroy(request, *args, **kwargs)
-
-    
-class LogViewSet(mixins.CreateModelMixin,
-                 viewsets.GenericViewSet):
-    queryset = Log.objects.all()
-    serializer_class = LogSerializer
 
 
 

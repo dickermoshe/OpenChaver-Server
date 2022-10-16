@@ -16,8 +16,10 @@ class Device(models.Model):
     user = models.ForeignKey(get_user_model(),
                              on_delete=models.CASCADE,
                              related_name='devices')
+
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4, editable=False, unique=True,)
     uninstall_code = models.CharField(default=uuid.uuid4, max_length=255)
-    device_id = models.CharField(default=uuid.uuid4, max_length=255,unique=True,db_index=True)
+    
     name = models.CharField(max_length=100)
     registered = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
