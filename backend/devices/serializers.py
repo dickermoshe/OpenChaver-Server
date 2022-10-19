@@ -3,13 +3,6 @@ from rest_framework import serializers as s
 
 from .models import Device, Screenshot, Chaver, Log
 
-class DeviceSerializer(s.ModelSerializer):
-    """This is the serializer for the Device model"""
-    user = s.HiddenField(default=s.CurrentUserDefault())
-    class Meta: # pylint: disable=missing-class-docstring
-        model = Device
-        fields = ('id','user','name','created','registered','screenshots','chavers')
-        read_only_fields = ('created','screenshots','chavers','id','registered','user')
 
 class UninstallCodeSerializer(s.ModelSerializer):
     """Serializer for uninstall code"""
@@ -74,4 +67,17 @@ class ChaverSerializer(s.ModelSerializer):
 class VerifyUninstallCodeSerializer(s.Serializer):# pylint: disable=abstract-method
     """Serializer for verifying the uninstall code"""
     uninstall_code = s.CharField(max_length=100)
+
+class DeviceSerializer(s.ModelSerializer):
+    """This is the serializer for the Device model"""
+    user = s.HiddenField(default=s.CurrentUserDefault())
+
+    chavers = ChaverSerializer(many=True, read_only=True)
+    screenshots = ScreenshotSerializer(many=True, read_only=True)
+
+    class Meta: # pylint: disable=missing-class-docstring
+        model = Device
+        fields = ('id','user','name','created','registered','screenshots','chavers')
+        read_only_fields = ('created','screenshots','chavers','id','registered','user')
+
     
