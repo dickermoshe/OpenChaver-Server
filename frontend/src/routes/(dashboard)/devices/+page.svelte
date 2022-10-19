@@ -2,7 +2,7 @@
 	import { api } from '$lib/api'
 
 	let devices: any = [
-		{
+		/* {
 			id: 0,
 			name: 'DESKTOP-QDI5S9G',
 			model: 'Surface book',
@@ -27,14 +27,34 @@
 				name: 'John Doe',
 				email: 'johndoe@example.com'
 			}
-		}
-	]
+		} */
+	],
+	newDeviceName: string,
+	newDevice: object
 
 	const loadDevices = () => {
 		api('GET', 'devices/')
-			.then((res) => res.json())
+			.then((res) => {
+				console.assert(!(res.status === 401), 'Logout and lag back in to continue.')
+				return res.json()
+			})
 			.then((json) => (devices = json))
 	}
+	const createDevice = () => {
+		api('POST', 'devices/', {
+			name: newDeviceName
+		})
+			.then((res) => {
+				if(res.status === 201)
+					return res.json()
+			})
+			.then((json) => {
+				newDeviceName = ''
+				newDevice = json
+				devices = [...devices, newDevice]
+			})
+	}
+	$: loadDevices()
 </script>
 
 <p>View the devices linked to your account and/or register new ones.</p>
@@ -42,12 +62,11 @@
 <section>
 	{#each devices as device}
 		<div class="category row">
-			<img src="{device.form_factor}.png" alt={device.form_factor} />
+			<img src="desktop.png" alt={device.form_factor} />
 			<div class="stats">
 				<div class="largeText">{device.name}</div>
-				<div class="subText">{device.model}</div>
-				<div class="subText">{device.os}</div>
-				<div class="subText">Chaver: {device.chaver.name}</div>
+				<div class="subText">Id: {device.id}</div>
+				<div class="subText">Chaver: {device.chaver?.name ?? 'Not set'}</div>
 				<a href="/devices/{device.id}">Edit details</a>
 			</div>
 		</div>
@@ -57,6 +76,19 @@
 		</div>
 	{/each}
 </section>
+
+<form action="https://api.openchaver.com/devices/" method="POST" on:submit|preventDefault={createDevice}>
+	<h2>Add device</h2>
+	<label for="new_name">Name device</label>
+	<input type="text" id="new_name" bind:value={newDeviceName}>
+	<br />
+	<input type="submit" value="Create device">
+</form>
+
+{#if newDevice}
+<br />
+The new device id is: {newDevice.id}
+{/if}
 
 <style>
 	section {
