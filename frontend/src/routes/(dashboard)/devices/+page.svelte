@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation'
 	import { api } from '$lib/api'
 
 	let devices: any = [
@@ -34,7 +35,11 @@
 
 	const loadDevices = () => {
 		api('GET', 'devices/')
-			.then((res) => res.json())
+			.then((res) => {
+				if(res.status === 401)
+					goto('/login')
+				return res.json()
+			})
 			.then((json) => (devices = json))
 	}
 	const createDevice = () => {
