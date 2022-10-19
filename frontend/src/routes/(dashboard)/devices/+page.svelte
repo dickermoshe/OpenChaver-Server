@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { api } from '$lib/api'
 
-	let devices = [
+	let devices: any = [
 		{
 			id: 0,
 			name: 'DESKTOP-QDI5S9G',
@@ -48,8 +48,12 @@
 				<div class="subText">{device.model}</div>
 				<div class="subText">{device.os}</div>
 				<div class="subText">Chaver: {device.chaver.name}</div>
-				<a href="#_">Edit details</a>
+				<a href="/devices/{device.id}">Edit details</a>
 			</div>
+		</div>
+	{:else}
+		<div class="category">
+			You don't have any devices on your account
 		</div>
 	{/each}
 </section>
@@ -72,11 +76,14 @@
 		border-radius: 8px;
 		overflow: hidden;
 	}
+	.category.large {
+		grid-column: 1/3;
+	}
 	.category img {
-		padding: 1rem calc(var(--general-spacing) * 1.5);
-		box-sizing: border-box;
 		max-height: 160px;
-		max-width: 200px;
+		max-width: 160px;
+		margin: .75rem calc(var(--general-spacing) * 1.5);
+		box-sizing: border-box;
 	}
 	.category .stats {
 		max-width: 60%;
