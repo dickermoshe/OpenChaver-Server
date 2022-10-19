@@ -225,13 +225,16 @@ LOGGING = {
 DOMAIN= 'openchaver.com'
 SITE_NAME = 'OpenChaver'
 DJOSER = {
-    
     # TODO: Set this to the correct URL for the frontend
     # This is for the frontend developer to set
     'PASSWORD_RESET_CONFIRM_URL': "reset-password/{uid}/{token}",
     'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
-    'SERIALIZERS': {},
+    'SERIALIZERS': {
+        'user_create': 'users.serializers.UserCreateSerializer',
+        'user': 'users.serializers.UserSerializer',
+        'current_user': 'users.serializers.UserSerializer',
+    },
     'EMAIL':{
         'activation': 'djoser.email.ActivationEmail',
         'confirmation': 'djoser.email.ConfirmationEmail',
