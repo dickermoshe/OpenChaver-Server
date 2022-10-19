@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation'
 	import { api } from '$lib/api'
 
 	let devices: any = [
@@ -36,8 +35,7 @@
 	const loadDevices = () => {
 		api('GET', 'devices/')
 			.then((res) => {
-				if(res.status === 401)
-					goto('/login')
+				console.assert(!(res.status === 401), 'Logout and lag back in to continue.')
 				return res.json()
 			})
 			.then((json) => (devices = json))
