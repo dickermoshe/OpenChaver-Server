@@ -19,7 +19,7 @@
 POST auth/users/resend_activation/
 ```json
 {
-  "email": "user@example.com"
+	"email": "user@example.com"
 }
 ```
 
@@ -27,7 +27,7 @@ POST auth/users/resend_activation/
 POST /devices/
 ```json
 {
-  "name": "string"
+	"name": "string"
 }
 ```
 
@@ -35,8 +35,8 @@ POST /devices/
 POST /chavers/
 ```json
 {
-  "name": "string",
-  "email": "user@example.com"
+	"name": "string",
+	"email": "user@example.com"
 }
 ```
 
@@ -50,12 +50,28 @@ returns with device info with an {uid}
 
 Add chavers
 ---
+```json
 {
-  "name": "string",
-  "email": "user@example.com",
-  "device": "uuid"
+	"name": "string",
+	"email": "user@example.com",
+	"device": "uuid"
 }
+```
 
 // delete/remove chaver
 
 DELETE /chavers/{id}/
+
+Setup a device
+POST http://localhost:5000/configure
+```json
+{
+	"device_id": "string"
+}
+```
+
+Unregister device
+POST 
+```json
+
+```
