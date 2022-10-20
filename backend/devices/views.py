@@ -114,18 +114,6 @@ class ScreenshotViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
     queryset = Screenshot.objects.all()
     serializer_class = ScreenshotSerializer
     permission_classes = [ScreenShotPermission]
-    multiple_lookup_fields = ['device', 'pk']
-    
-    def get_object(self):
-        queryset = self.get_queryset()
-        filter = {}
-        for field in self.multiple_lookup_fields:
-            print(field)
-            filter[field] = self.kwargs[field]
-
-        obj = get_object_or_404(queryset, **filter)
-        self.check_object_permissions(self.request, obj)
-        return obj
 
     def get_queryset(self):
         return self.queryset.filter(device__user=self.request.user)
