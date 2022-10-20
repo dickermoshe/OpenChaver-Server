@@ -11,7 +11,7 @@ class UninstallCodeSerializer(s.ModelSerializer):
         fields = ('uninstall_code',)
         read_only_fields = ('uninstall_code',)
 
-class ScreenshotSerializer(s.ModelSerializer):
+class ScreenshotSerializer(s.HyperlinkedModelSerializer):
     """Serializer for the Screenshot model."""
     class Meta: # pylint: disable=missing-class-docstring
         model = Screenshot
@@ -77,7 +77,7 @@ class DeviceSerializer(s.ModelSerializer):
 
     class Meta: # pylint: disable=missing-class-docstring
         model = Device
-        fields = ('id','user','name','created','registered','screenshots','chavers','last_seen')
-        read_only_fields = ('created','screenshots','chavers','id','registered','user','last_seen')
+        fields = ('id','user','name','created','registered','screenshots','chavers')
+        read_only_fields = ('created','screenshots','chavers','id','registered','user')
 
     

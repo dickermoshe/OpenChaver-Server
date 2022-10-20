@@ -4,7 +4,7 @@ from django.urls import path, include
 from .views import DeviceViewSet ,ScreenshotViewSet, ChaverViewSet,send_reports
 
 router = DefaultRouter()
-router.register(r'devices', DeviceViewSet, basename='devices')
+router.register(r'devices', DeviceViewSet, basename='device')
 router.register(r'screenshots', ScreenshotViewSet, basename='screenshots')
 router.register(r'chavers', ChaverViewSet, basename='chavers')
 
