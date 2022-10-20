@@ -1,16 +1,14 @@
 import logging
-from urllib import request
 
-from django.core.mail import send_mail
-from django.conf import settings
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework import permissions
 from rest_framework import status
-from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.decorators import action, api_view, authentication_classes,permission_classes
 from rest_framework.authentication import TokenAuthentication
+
 
 from drf_spectacular.utils import extend_schema
 
@@ -116,6 +114,18 @@ class ScreenshotViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
     queryset = Screenshot.objects.all()
     serializer_class = ScreenshotSerializer
     permission_classes = [ScreenShotPermission]
+    multiple_lookup_fields = ['device', 'pk']
+    
+    def get_object(self):
+        queryset = self.get_queryset()
+        filter = {}
+        for field in self.multiple_lookup_fields:
+            print(field)
+            filter[field] = self.kwargs[field]
+
+        obj = get_object_or_404(queryset, **filter)
+        self.check_object_permissions(self.request, obj)
+        return obj
 
     def get_queryset(self):
         return self.queryset.filter(device__user=self.request.user)
