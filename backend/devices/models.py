@@ -58,14 +58,11 @@ class Device(models.Model):
                     html_message=html_message,
                     fail_silently=True)
 
-        
-
-
-
-        
-
-
-        
+    @property
+    def last_seen(self):
+        """This function returns the last seen date of the device"""
+        # Return the created date of the latest screenshot
+        return self.screenshots.latest('created').created if self.screenshots.exists() else self.created
         
 
     def __str__(self):
@@ -146,7 +143,7 @@ class Screenshot(models.Model):
         """
         return html
 
-        
+
         
 
 

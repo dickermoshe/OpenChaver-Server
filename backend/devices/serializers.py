@@ -77,7 +77,7 @@ class DeviceSerializer(s.ModelSerializer):
 
     class Meta: # pylint: disable=missing-class-docstring
         model = Device
-        fields = ('id','user','name','created','registered','screenshots','chavers')
-        read_only_fields = ('created','screenshots','chavers','id','registered','user')
+        fields = ('id','user','name','created','registered','screenshots','chavers','last_seen')
+        read_only_fields = ('created','screenshots','chavers','id','registered','user','last_seen')
 
     
