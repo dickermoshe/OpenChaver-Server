@@ -38,9 +38,15 @@
 			</div>
 		{:else}
 			<div class="card">
-				{device.name} doesn't have screenshots captures
+				{device.name} doesn't have screenshots captures.
 			</div>
 		{/each}
+	</section>
+{:else}
+	<section>
+		<div class="card">
+			You must first <a href="/devices">add devices</a> to your account.
+		</div>
 	</section>
 {/each}
 	
