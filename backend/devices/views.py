@@ -67,7 +67,7 @@ class DeviceViewSet(mixins.DestroyModelMixin,mixins.UpdateModelMixin, mixins.Lis
 
 
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user,registered=True)
+        return self.queryset.filter(user=self.request.user)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
