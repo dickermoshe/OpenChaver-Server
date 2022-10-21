@@ -15,7 +15,7 @@
 </script>
 
 <header class:dark={!$page.routeId}>
-	<a href={isDashboard? "/dashboard": "../"} id="logo">
+	<a href={isDashboard && $page.routeId !== '(dashboard)/dashboard'? "/dashboard": "../"} id="logo">
 		<!-- <img src="/favicon.png" alt="logo"> -->
 		<h1>OpenChaver</h1>
 	</a>
@@ -59,10 +59,10 @@
 		flex-direction: row;
 		align-items: center;
 	}
-	#logo img {
+	/* #logo img {
 		height: 26px;
 		padding-right: calc(var(--general-spacing) / 3);
-	}
+	} */
 	h1 {
 		font-size: 1.375rem;
 	}

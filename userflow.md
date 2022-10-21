@@ -8,7 +8,7 @@
 | 2b. Request password reset link     | `/reset-password`                               | POST `auth/users/reset_password/`            |
 | 2c. Reset password                  | `openchaver.com/reset-password/[uid]/[token]`   | POST `auth/users/reset_password_confirm/`    |
 | 3.  Login                           | `/login`                                        | POST `auth/token/login/`                     |
-| 3a. Logout                          | Button click                                    | POST `auth/token/logout/`                    |
+| 3a. Logout                          | `<Header />` Button click                       | POST `auth/token/logout/`                    |
 | 4.  Add a device to account         |                                                 | POST `devices/`                              |
 | 5.  Assign device to chaver         |                                                 | POST `chavers/`                              |
 

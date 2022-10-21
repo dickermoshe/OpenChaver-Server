@@ -30,7 +30,7 @@
 		} */
 	],
 	newDeviceName: string,
-	newDevice: object
+	newDevice: any
 
 	const loadDevices = () => {
 		api('GET', 'devices/')
@@ -66,7 +66,11 @@
 			<div class="stats">
 				<div class="largeText">{device.name}</div>
 				<div class="subText">Id: {device.id}</div>
-				<div class="subText">Chaver: {device.chaver?.name ?? 'Not set'}</div>
+				{#if device.registered}
+					<div class="subText">Chaver: {device.chaver?.name ?? 'Not set'}</div>
+				{:else}
+					<div class="subText err">Device is not linked</div>
+				{/if}
 				<a href="/devices/{device.id}">Edit details</a>
 			</div>
 		</div>
@@ -108,9 +112,9 @@ The new device id is: {newDevice.id}
 		border-radius: 8px;
 		overflow: hidden;
 	}
-	.category.large {
+	/* .category.large {
 		grid-column: 1/3;
-	}
+	} */
 	.category img {
 		max-height: 160px;
 		max-width: 160px;
@@ -135,5 +139,9 @@ The new device id is: {newDevice.id}
 	.category a {
 		display: inline-block;
 		margin-top: 0.5rem;
+	}
+	.category .err {
+		color: var(--yellow);
+		font-weight: 700;
 	}
 </style>
