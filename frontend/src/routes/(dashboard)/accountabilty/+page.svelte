@@ -14,6 +14,7 @@
 		if(res.status === 200)
 			screenshots = [...screenshots, ...await tempres.json()]
 	}
+	const markFalsePositive = (id: string) => api('POST', `screenshots/${id}/false_positive/`)
 
 	$: loadScreenshots()
 </script>
@@ -32,7 +33,7 @@
 					<div class="subtext">{event.created}</div>
 					<div class="subtext">{event.nsfw? 'Inappropriate content': 'Random screen review'}</div>
 					{#if event.false_positive}
-						<a href="">Mark as false positive</a>
+						<a href="/devices" on:click|preventDefault={() => markFalsePositive(device.id)}>Mark as false positive</a>
 					{/if}
 				</div>
 			</div>
