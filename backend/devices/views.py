@@ -88,7 +88,7 @@ class DeviceViewSet(mixins.DestroyModelMixin,mixins.UpdateModelMixin, mixins.Lis
         """Register a device to the user's devices list """
         device = Device.objects.get(id=pk)
         if device.registered:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST,data={'error':"Device already registered"})
         else:
             logger.info(f"Device {pk} registered to user {request.user}")
             device.registered = True
