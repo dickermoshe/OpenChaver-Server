@@ -27,6 +27,11 @@
 	linkDevice()
 </script>
 
+<svelte:head>
+	<title>Link device | OpenChaver</title>
+	<meta name="description" content="Download client and link a device to your account." />
+</svelte:head>
+
 <section>
 	<p>
 		{status}<br />

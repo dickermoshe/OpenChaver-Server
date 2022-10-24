@@ -29,6 +29,11 @@
 	$: loadDevices()
 </script>
 
+<svelte:head>
+	<title>Devices | OpenChaver</title>
+	<meta name="description" content="View the devices on your account." />
+</svelte:head>
+
 <p>View the devices linked to your account and/or register new ones.</p>
 
 <section>
