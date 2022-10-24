@@ -6,10 +6,16 @@
 	/>
 </svelte:head>
 
-<section id='hero'>
+<section id="hero">
 	<div class="container">
-		<h1>Stay accountable for what is on your screen&nbsp;<div class="tag">Early access</div></h1>
-		<h3>Software that shares screenshots of your computer screen with a partner to monitor what you are viewing.</h3>
+		<h1>
+			Stay accountable for what is on your screen&nbsp;
+			<div class="tag">Early access</div>
+		</h1>
+		<h3>
+			Software that shares screenshots of your computer screen with a partner to monitor what you
+			are viewing.
+		</h3>
 		<a href="/signup" class="button" data-sveltekit-prefetch>Filter my device</a>
 	</div>
 </section>
@@ -17,7 +23,9 @@
 <section>
 	<div class="container">
 		<h1>Links</h1>
-		Desktop client [still in development]: <a href="https://github.com/dickermoshe/openchaver/releases">Releases</a><br />
+		Desktop client [still in development]:<a
+			href="https://github.com/dickermoshe/openchaver/releases">Releases</a
+		><br />
 		View the code: <a href="https://github.com/dickermoshe/openchaver">Github repo</a>
 	</div>
 </section>
@@ -38,7 +46,7 @@
 		display: inline-block;
 		padding: calc(var(--general-spacing) / 5) calc(var(--general-spacing) / 2);
 		border-radius: 4px;
-		font-size: .75rem;
+		font-size: 0.75rem;
 		font-weight: 700;
 		text-transform: uppercase;
 		vertical-align: super;
@@ -54,9 +62,9 @@
 	a.button {
 		display: inline-block;
 		margin-top: 1rem;
-		padding: .5rem 1rem;
+		padding: 0.5rem 1rem;
 		border-radius: 4px;
-		font-size: .875rem;
+		font-size: 0.875rem;
 		font-weight: 700;
 		color: #fff;
 		background-color: var(--active-color);

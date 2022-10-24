@@ -1,7 +1,7 @@
-import { authToken } from "./authToken"
+import { authToken } from './authToken'
 
 let token: any
-authToken.subscribe(val => token = val)
+authToken.subscribe((val) => (token = val))
 
 const base = 'https://api.openchaver.com'
 
@@ -10,7 +10,7 @@ export const api = (method: string, resource: string, data?: Record<string, unkn
 		method,
 		headers: {
 			'content-type': 'application/json',
-			Authorization: token? `Token ${token}`: ''
+			Authorization: token ? `Token ${token}` : ''
 		},
 		body: data && JSON.stringify(data)
 	})

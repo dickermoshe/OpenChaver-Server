@@ -4,7 +4,7 @@
 	import Header from '$lib/Header.svelte'
 	import '../app.css'
 
-	$: if($page.routeId === 'signup' || $page.routeId === 'login') authToken.set('')
+	$: if ($page.routeId === 'signup' || $page.routeId === 'login') authToken.set('')
 </script>
 
 <Header />

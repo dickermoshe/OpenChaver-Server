@@ -10,9 +10,9 @@
 		})
 		errs = {}
 
-		if(res.status === 201) {
+		if (res.status === 201) {
 			alert('confirm email')
-		} else if(res.status === 400) {
+		} else if (res.status === 400) {
 			errs = await res.json()
 			console.log(errs)
 		}
@@ -21,10 +21,7 @@
 
 <svelte:head>
 	<title>Signup | OpenChaver</title>
-	<meta
-		name="description"
-		content="Setup an account to access our content filtering services."
-	/>
+	<meta name="description" content="Setup an account to access our content filtering services." />
 </svelte:head>
 
 <section>
@@ -39,7 +36,13 @@
 				</div>
 				<div class="inputContainer">
 					<label for="password">Password</label>
-					<input bind:value={password} type="password" name="password" id="password" autocomplete="new-password" />
+					<input
+						bind:value={password}
+						type="password"
+						name="password"
+						id="password"
+						autocomplete="new-password"
+					/>
 					<div class="error smallBody">{errs?.password?.[0] ?? ''}&nbsp;</div>
 				</div>
 				<!-- <p class="smallBody">Forgot your password and cannot login?<br /><a href="reset-password">Reset password</a></p> -->
@@ -83,19 +86,20 @@
 		color: var(--red);
 	}
 	.smallBody {
-		font-size: .875rem;
+		font-size: 0.875rem;
 	}
 	.buttonContainer {
 		display: flex;
 		justify-content: space-between;
 		margin-top: var(--general-spacing);
 	}
-	button, input[type=submit] {
-		padding: .5rem 1rem;
+	button,
+	input[type='submit'] {
+		padding: 0.5rem 1rem;
 		border: none;
 		background: var(--secondary-bg-color);
-		font-size: .875rem;
-		letter-spacing: .05rem;
+		font-size: 0.875rem;
+		letter-spacing: 0.05rem;
 		cursor: pointer;
 	}
 </style>
