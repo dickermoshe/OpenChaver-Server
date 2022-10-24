@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { page } from '$app/stores'
-	export const prerender = false
+	export let data: any
 
+	const { uuid } = data
 	let status = false
 
 	const linkDevice = async () => {
@@ -9,7 +9,7 @@
 			method: 'POST',
 			headers: new Headers({ 'content-type': 'application/json' }),
 			body: JSON.stringify({
-				device_id: $page.params.uuid
+				device_id: uuid
 			})
 		})
 
