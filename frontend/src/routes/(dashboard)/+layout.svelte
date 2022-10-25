@@ -3,9 +3,9 @@
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
 	import { authToken } from '$lib/authToken'
-	
+
 	// Send user to /login page if not authenticated
-	if(!$authToken && browser) goto('/login')
+	if (!$authToken && browser) goto('/login')
 
 	const routes = ['dashboard', 'devices', 'accountabilty', 'account', 'subscription']
 </script>
@@ -56,6 +56,7 @@
 		padding: calc(var(--general-spacing) / 3) 0 calc(var(--general-spacing) / 3)
 			calc(var(--general-spacing) / 2);
 		color: inherit;
+		/* font-size: .875rem; */
 		text-decoration: none;
 	}
 	:global(main > h1) {

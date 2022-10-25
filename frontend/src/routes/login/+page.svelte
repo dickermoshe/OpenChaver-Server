@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto } from '$app/navigation'
 	import { api } from '$lib/api'
 	import { authToken } from '$lib/authToken'
 
@@ -12,11 +12,11 @@
 		})
 		errs = {}
 
-		if(res.status === 200) {
+		if (res.status === 200) {
 			const data = await res.json()
 			$authToken = data.auth_token
 			goto('/dashboard')
-		} else if(res.status === 400 || res.status === 401) {
+		} else if (res.status === 400 || res.status === 401) {
 			errs = await res.json()
 			console.log(errs)
 		}
@@ -44,7 +44,9 @@
 					<label for="password">Password</label>
 					<input bind:value={password} type="password" name="password" id="password" />
 				</div>
-				<p class="smallBody">Forgot your password and cannot login?<br /><a href="reset-password">Reset password</a></p>
+				<p class="smallBody">
+					Forgot your password and cannot login?<br /><a href="reset-password">Reset password</a>
+				</p>
 				<p class="error">{errs?.non_field_errors?.[0] ?? ''}</p>
 				<div class="buttonContainer">
 					<a href="/signup" class="button" data-sveltekit-prefetch>Signup</a>
@@ -86,19 +88,20 @@
 		color: var(--red);
 	}
 	.smallBody {
-		font-size: .875rem;
+		font-size: 0.875rem;
 	}
 	.buttonContainer {
 		display: flex;
 		justify-content: space-between;
 		margin-top: var(--general-spacing);
 	}
-	button, input[type=submit] {
-		padding: .5rem 1rem;
+	button,
+	input[type='submit'] {
+		padding: 0.5rem 1rem;
 		border: none;
 		background: var(--secondary-bg-color);
-		font-size: .875rem;
-		letter-spacing: .05rem;
+		font-size: 0.875rem;
+		letter-spacing: 0.05rem;
 		cursor: pointer;
 	}
 </style>

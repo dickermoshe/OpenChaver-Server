@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { page } from "$app/stores"
-	import { authToken } from "./authToken"
+	import { page } from '$app/stores'
+	import { authToken } from './authToken'
 
 	let isDashboard: boolean
 	$: isDashboard = ($page.routeId?.search(/\(dashboard\)\//) ?? -1) > -1
@@ -15,7 +15,10 @@
 </script>
 
 <header class:dark={!$page.routeId}>
-	<a href={isDashboard && $page.routeId !== '(dashboard)/dashboard'? "/dashboard": "../"} id="logo">
+	<a
+		href={isDashboard && $page.routeId !== '(dashboard)/dashboard' ? '/dashboard' : '../'}
+		id="logo"
+	>
 		<!-- <img src="/favicon.png" alt="logo"> -->
 		<h1>OpenChaver</h1>
 	</a>

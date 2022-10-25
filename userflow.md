@@ -63,7 +63,7 @@ Add chavers
 DELETE /chavers/{id}/
 
 Setup a device
-POST http://localhost:5000/configure
+POST http://localhost:61195/configure
 ```json
 {
 	"device_id": "string"

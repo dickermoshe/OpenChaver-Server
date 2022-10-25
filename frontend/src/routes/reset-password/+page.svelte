@@ -9,9 +9,9 @@
 		})
 		errs = {}
 
-		if(res.status === 204) {
+		if (res.status === 204) {
 			alert('Email sent to reset your password.')
-		} else if(res.status === 400) {
+		} else if (res.status === 400) {
 			errs = await res.json()
 			console.log(errs)
 		}
@@ -20,10 +20,7 @@
 
 <svelte:head>
 	<title>Reset password | OpenChaver</title>
-	<meta
-		name="description"
-		content="Reset your password to access your account."
-	/>
+	<meta name="description" content="Reset your password to access your account." />
 </svelte:head>
 
 <section>
@@ -76,19 +73,20 @@
 		color: var(--red);
 	}
 	.smallBody {
-		font-size: .875rem;
+		font-size: 0.875rem;
 	}
 	.buttonContainer {
 		display: flex;
 		justify-content: space-between;
 		margin-top: var(--general-spacing);
 	}
-	button, input[type=submit] {
-		padding: .5rem 1rem;
+	button,
+	input[type='submit'] {
+		padding: 0.5rem 1rem;
 		border: none;
 		background: var(--secondary-bg-color);
-		font-size: .875rem;
-		letter-spacing: .05rem;
+		font-size: 0.875rem;
+		letter-spacing: 0.05rem;
 		cursor: pointer;
 	}
 </style>

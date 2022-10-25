@@ -1,39 +1,36 @@
-<script lang='ts'>
-	import { api } from "$lib/api"
+<script lang="ts">
+	import { api } from '$lib/api'
 
 	let screenshots: any = [],
-	devices: any = []
+		devices: any = []
 
 	const loadScreenshots = async () => {
 		const res = await api('GET', 'devices/')
-		if(res.status === 200)
-			devices = [...devices, ...await res.json()]
-
+		if (res.status === 200) devices = [...devices, ...(await res.json())]
 
 		const tempres = await api('GET', 'screenshots/')
-		if(res.status === 200)
-			screenshots = [...screenshots, ...await tempres.json()]
+		if (res.status === 200) screenshots = [...screenshots, ...(await tempres.json())]
 	}
 	const markFalsePositive = (id: string) => api('POST', `screenshots/${id}/false_positive/`)
 
 	$: loadScreenshots()
 </script>
 
-<p>
-	Review captured screenshots and mark false positives
-</p>
+<p>Review captured screenshots and mark false positives</p>
 
 {#each devices as device}
 	<section>
 		{#each device.screenshots as event}
 			<div class="card row">
-				<img src={event.image} alt="Screenshot from device">
+				<img src={event.image} alt="Screenshot from device" />
 				<div class="info">
 					<div class="largeText">{device.name}</div>
 					<div class="subtext">{event.created}</div>
-					<div class="subtext">{event.nsfw? 'Inappropriate content': 'Random screen review'}</div>
+					<div class="subtext">{event.nsfw ? 'Inappropriate content' : 'Random screen review'}</div>
 					{#if event.false_positive}
-						<a href="/devices" on:click|preventDefault={() => markFalsePositive(device.id)}>Mark as false positive</a>
+						<a href="/devices" on:click|preventDefault={() => markFalsePositive(device.id)}
+							>Mark as false positive</a
+						>
 					{/if}
 				</div>
 			</div>
@@ -50,7 +47,7 @@
 		</div>
 	</section>
 {/each}
-	
+
 <style>
 	section {
 		display: grid;
@@ -75,7 +72,7 @@
 	.card img {
 		max-height: 160px;
 		max-width: 160px;
-		margin: .75rem calc(var(--general-spacing) * 1.5);
+		margin: 0.75rem calc(var(--general-spacing) * 1.5);
 		box-sizing: border-box;
 	}
 	.card .info {
