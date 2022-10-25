@@ -180,6 +180,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://openchaver.com",
     "https://api.openchaver.com",
+    'https://platform.preview.appgyver.com',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -187,6 +188,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "https://openchaver.com",
     "https://api.openchaver.com",
+    'https://platform.preview.appgyver.com',
 ]
 
 
