@@ -21,8 +21,8 @@ class ScreenshotSerializer(s.HyperlinkedModelSerializer):
 
 class ScreenshotUploadSerializer(s.Serializer):
     """Serializer for uploading the Screenshots."""
-    title = s.CharField()
-    exec_name = s.CharField()
+    title = s.CharField(default = 'Uknown Title')
+    exec_name = s.CharField( default = 'Uknown Exec Name')
     base64_image = s.CharField(trim_whitespace=False) # Base64 
 
     nsfw = s.BooleanField(default=False)
