@@ -14,7 +14,7 @@ class DeviceAdmin(admin.ModelAdmin):
 admin.site.register(Device, DeviceAdmin)
 
 class ScreenshotAdmin(admin.ModelAdmin):
-    list_display = ['title','device_html', 'nsfw', 'profane','created']
+    list_display = ['title','device_html', 'nsfw', 'profane','created','uploaded_at']
     list_filter = ['nsfw', 'profane']
     search_fields = ['title', 'device__name']
 
