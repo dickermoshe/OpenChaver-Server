@@ -89,6 +89,8 @@ class Screenshot(models.Model):
     created = models.DateTimeField()
 
     false_positive = models.BooleanField(default=False)
+
+    uploaded_at = models.DateTimeField(auto_now_add=True,null=True)
     
 
     def __str__(self):
