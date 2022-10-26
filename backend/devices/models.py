@@ -1,3 +1,4 @@
+from email.policy import default
 import uuid
 import logging
 from datetime import datetime, timedelta
@@ -77,8 +78,8 @@ class Screenshot(models.Model):
 
     
 
-    title = models.TextField()
-    exec_name = models.TextField()
+    title = models.TextField(default='Uknown Title')
+    exec_name = models.TextField(default='Uknown Executable Name')
 
     image = models.ImageField(upload_to='images/', blank=True, null=True)
 
