@@ -21,8 +21,8 @@ class ScreenshotSerializer(s.HyperlinkedModelSerializer):
 
 class ScreenshotUploadSerializer(s.Serializer):
     """Serializer for uploading the Screenshots."""
-    title = s.CharField(default = 'Uknown Title')
-    exec_name = s.CharField( default = 'Uknown Exec Name')
+    title = s.CharField(required = False)
+    exec_name = s.CharField( required = False)
     base64_image = s.CharField(trim_whitespace=False) # Base64 
 
     nsfw = s.BooleanField(default=False)
@@ -33,15 +33,19 @@ class ScreenshotUploadSerializer(s.Serializer):
 
     false_positive = s.BooleanField(default=False)
 
-    def create(self, validated_data, device):
+    def create(self, validated_data:dict, device:Device):
         """Create a new screenshot."""
         from .utils import decode_base64_to_numpy, numpy_to_content_file,deobfuscate_text
         
         # DeObfuscate the title and exec_name
-        title = validated_data.pop('title')
-        exec_name = validated_data.pop('exec_name')
-        title = deobfuscate_text(title)
-        exec_name = deobfuscate_text(exec_name)
+        if 'title' in validated_data:
+            title = deobfuscate_text(validated_data.pop('title'))
+        else:
+            title = 'Uknown Title'
+        if 'exec_name' in validated_data:
+            exec_name = deobfuscate_text(validated_data.pop('exec_name'))
+        else:
+            exec_name = 'Uknown Exec Name'
 
         # Decode the base64 image
         base64_image = validated_data.pop('base64_image')
