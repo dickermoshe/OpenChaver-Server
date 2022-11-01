@@ -26,7 +26,7 @@ body {
 }
 body > div {
 	display: grid;
-	grid-template-rows: var(--header-height) repeat(auto-fill, auto);
+	grid-template-rows: var(--header-height) calc(100vh - var(--header-height));
 	grid-template-columns: var(--general-spacing) 250px calc(var(--general-spacing) * 1.5) auto var(
 			--general-spacing
 		);

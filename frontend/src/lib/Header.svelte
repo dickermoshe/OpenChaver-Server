@@ -2,16 +2,7 @@
 	import { page } from '$app/stores'
 	import { authToken } from './authToken'
 
-	let isDashboard: boolean
 	$: isDashboard = ($page.routeId?.search(/\(dashboard\)\//) ?? -1) > -1
-
-	const logout = async () => {
-		$authToken = ''
-		await fetch('https://api.openchaver.com/auth/token/logout/', {
-			method: 'POST'
-		})
-		window.location.href = '../'
-	}
 </script>
 
 <header class:dark={!$page.routeId}>
@@ -23,9 +14,7 @@
 		<h1>OpenChaver</h1>
 	</a>
 	<div class="buttons">
-		{#if isDashboard}
-			<a href="../" on:click|preventDefault={logout} data-sveltekit-prefetch>Logout</a>
-		{:else if $authToken}
+		{#if $authToken}
 			<a href="/dashboard" data-sveltekit-prefetch>Dashboard</a>
 		{:else}
 			<a href="/login" data-sveltekit-prefetch>Login</a>

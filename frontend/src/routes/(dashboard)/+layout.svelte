@@ -7,7 +7,14 @@
 	// Send user to /login page if not authenticated
 	if (!$authToken && browser) goto('/login')
 
-	const routes = ['dashboard', 'devices', 'accountabilty', 'account', 'subscription']
+	const routes = ['dashboard', 'devices', 'accountabilty', 'account', 'subscription'],
+		logout = async () => {
+			$authToken = ''
+			await fetch('https://api.openchaver.com/auth/token/logout/', {
+				method: 'POST'
+			})
+			window.location.href = '../'
+		}
 </script>
 
 <aside>
@@ -18,6 +25,9 @@
 					<a href={route} data-sveltekit-prefetch>{route}</a>
 				</li>
 			{/each}
+			<li>
+				<a href="../" on:click|preventDefault={logout} data-sveltekit-prefetch>Logout</a>
+			</li>
 		</ul>
 	</nav>
 </aside>
@@ -28,6 +38,12 @@
 </main>
 
 <style>
+	aside,
+	nav,
+	ul {
+		position: relative;
+		height: 100%;
+	}
 	aside a {
 		text-transform: capitalize;
 	}
@@ -58,6 +74,13 @@
 		color: inherit;
 		/* font-size: .875rem; */
 		text-decoration: none;
+	}
+	nav li:last-of-type {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		display: block;
+		margin-bottom: var(--general-spacing);
 	}
 	:global(main > h1) {
 		margin-top: 0;
